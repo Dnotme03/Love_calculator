@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Findings</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      color: #222;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #a41c43;
+      font-size: 2rem;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .log-container {
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .log {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+      font-family: monospace;
+      white-space: pre-line;
+      word-break: break-word;
+    }
+
+    .log-header {
+      font-weight: bold;
+      color: #c44569;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 15px;
+      font-size: 14px;
+      color: #555;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📑 Findings</h1>
+  <div class="log-container">
+    
+    <!-- Example log 1 -->
+    <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+║ 💖 Love Calculator Entry 💖  
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 🪿 developed by: 𝐃 ʜ 𝙰 ɴ 𝐢ⁱɪ  
+╚━━━━━━━━━━━━━━━━━━━  
+
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Munavvir  
+║ 😍 Crush: Farhana  
+║ ❤️ Love %: 98%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+
+    <!-- Example log 2 -->
+    <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+║ 💖 Love Calculator Entry 💖  
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: suhail 
+║ 😍 Crush:ayisha   
+║ ❤️ Love %: 92%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+
+  </div>
+
+  <footer>🪿 Made with ❤️ by Dhani</footer>
+
+  <!-- Background Audio -->
+  <audio id="bg-music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+  </audio>
+
+  <script>
+    // Play audio on first click/tap anywhere
+    document.addEventListener("click", () => {
+      const music = document.getElementById("bg-music");
+      if (music.paused) {
+        music.play().catch(err => console.log("Autoplay blocked:", err));
+      }
+    }, { once: true });
+  </script>
+
+</body>
+      </html>
