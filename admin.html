@@ -113,10 +113,21 @@
     }
   }
 
-  // Enable sound on first click
-  document.addEventListener("click", () => {
-    const video = document.getElementById("bg-video");
+  // VIDEO SOUND CONTROL
+  const video = document.getElementById("bg-video");
+
+  function enableSound() {
     video.muted = false;
-    video.play();
-  }, { once: true });
-  </script>
+    video.play().catch(err => console.log("Autoplay blocked:", err));
+  }
+
+  // Trigger sound on any interaction
+  document.addEventListener("click", enableSound, { once: true });
+  document.addEventListener("scroll", enableSound, { once: true });
+  document.addEventListener("touchstart", enableSound, { once: true });
+
+  // Ensure it never pauses
+  video.addEventListener("pause", () => {
+    video.play().catch(() => {});
+  });
+</script>
