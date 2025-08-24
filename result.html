@@ -20,10 +20,22 @@
 
     h1 {
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 15px;
       color: #a41c43;
       font-size: 2rem;
       text-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    /* Search bar */
+    #searchBar {
+      width: 100%;
+      max-width: 500px;
+      padding: 10px 15px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      font-size: 1rem;
     }
 
     .log-container {
@@ -65,33 +77,425 @@
 <body>
 
   <h1>📑 Findings</h1>
-  <div class="log-container">
+  
+  <!-- Search bar -->
+  <input type="text" id="searchBar" placeholder="🔍 Search by name...">
+
+  <div class="log-container" id="logContainer">
     
     <!-- Example log 1 -->
     <div class="log">
-      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
-║ 💖 Love Calculator Entry 💖  
+      <div class="log-header">
+      ╔━━━━━━━━━━━━━━━━━━━  
+║  Love CalculatorEntry💖
+╚━━━━━━━━━━━━━━━━━━━
+╔━━━━━━━━━━━━━━━━━━━  
+║  🪿developed by: dhani
 ╚━━━━━━━━━━━━━━━━━━━</div>
-╔━━━━━━━━━━━━━━━━━━━  
-║ 🪿 developed by: 𝐃 ʜ 𝙰 ɴ 𝐢ⁱɪ  
-╚━━━━━━━━━━━━━━━━━━━  
 
-╔━━━━━━━━━━━━━━━━━━━  
-║ 👤 User: Munavvir  
-║ 😍 Crush: Farhana  
-║ ❤️ Love %: 98%  
-╚━━━━━━━━━━━━━━━  
     </div>
 
     <!-- Example log 2 -->
     <div class="log">
       <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
-║ 💖 Love Calculator Entry 💖  
+  Love Calculator Entry   
 ╚━━━━━━━━━━━━━━━━━━━</div>
 ╔━━━━━━━━━━━━━━━━━━━  
-║ 👤 User: suhail 
-║ 😍 Crush: ayisha   
+║ 👤 User:  Nahyan 
+║ 😍 Crush: Minha   
+║ ❤️ Love %: 97%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+
+    <!-- Example log 3 -->
+    <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Beelu  
+║ 😍 Crush: Ichu    
+║ ❤️ Love %: 93%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+            <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Sinan 
+║ 😍 Crush: Naswa   
+║ ❤️ Love %: 92%   
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+    
+            <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Minhaj 
+║ 😍 Crush: Fathima   
+║ ❤️ Love %: 95%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Ajsal 
+║ 😍 Crush: Hiba   
+║ ❤️ Love %: 94%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Nahyan 
+║ 😍 Crush: Nida   
+║ ❤️ Love %: 97%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Hatham 
+║ 😍 Crush: Rizq   
+║ ❤️ Love %: 96%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Rishal 
+║ 😍 Crush: Rana   
+║ ❤️ Love %: 91%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Shabin 
+║ 😍 Crush: Femina   
+║ ❤️ Love %: 94%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Dhaniyal 
+║ 😍 Crush: Saja   
+║ ❤️ Love %: 97%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+            <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Ijas 
+║ 😍 Crush: naji   
+║ ❤️ Love %: 96%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+    
+            <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Ijas 
+║ 😍 Crush: Hamna   
+║ ❤️ Love %: 98%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: MHD RASAL 
+║ 😍 Crush: Naja cp   
+║ ❤️ Love %: 99%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: MHD RASAL 
+║ 😍 Crush: Rifa   
+║ ❤️ Love %: 93%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Shamil 
+║ 😍 Crush: misna   
+║ ❤️ Love %: 97%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Nihal pk 
+║ 😍 Crush: zanha   
+║ ❤️ Love %: 95%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Sinan 
+║ 😍 Crush: Nisva   
+║ ❤️ Love %: 98%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Shabin 
+║ 😍 Crush: rifa   
+║ ❤️ Love %: %  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+            <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Midlaj 
+║ 😍 Crush: Saja   
+║ ❤️ Love %: 93%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+    
+            <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Ijas 
+║ 😍 Crush: Avani   
+║ ❤️ Love %: 93%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: NK 
+║ 😍 Crush: TP   
+║ ❤️ Love %: 98%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Diljith
+║ 😍 Crush: Neha   
+║ ❤️ Love %: 96%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Munavvir 
+║ 😍 Crush: Rasheena   
+║ ❤️ Love %: 97%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Ijas 
+║ 😍 Crush: rifa   
+║ ❤️ Love %: 95%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: ijas 
+║ 😍 Crush: Rifa   
+║ ❤️ Love %: 98%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Ichaappi 
+║ 😍 Crush: Fathima   
+║ ❤️ Love %: 94%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+            <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Mithuu 
+║ 😍 Crush: Saja   
+║ ❤️ Love %: 91%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+    
+            <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Nasl 
+║ 😍 Crush: norq   
 ║ ❤️ Love %: 92%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Rabeeu 
+║ 😍 Crush: Fahima   
+║ ❤️ Love %: 92%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Munavvir 
+║ 😍 Crush: Farhana   
+║ ❤️ Love %: 86%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Nahyan 
+║ 😍 Crush: Shifa   
+║ ❤️ Love %: 94%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Muhammed ijas 
+║ 😍 Crush: Hamna fathima   
+║ ❤️ Love %: 98%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Muhammed jishan 
+║ 😍 Crush: Sana   
+║ ❤️ Love %: 92%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+                <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Aswin 
+║ 😍 Crush: Naiga   
+║ ❤️ Love %: 98%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+    
+    <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Munavvir 
+║ 😍 Crush: Rasheena   
+║ ❤️ Love %: 91%  
+╚━━━━━━━━━━━━━━━  
+    </div>
+    
+    
+    <div class="log">
+      <div class="log-header">╔━━━━━━━━━━━━━━━━━━━  
+ Love Calculator Entry   
+╚━━━━━━━━━━━━━━━━━━━</div>
+╔━━━━━━━━━━━━━━━━━━━  
+║ 👤 User: Midlaj 
+║ 😍 Crush: Afna   
+║ ❤️ Love %: 99%  
 ╚━━━━━━━━━━━━━━━  
     </div>
 
@@ -100,19 +504,40 @@
   <footer>🪿 Made with ❤️ by Dhani</footer>
 
   <!-- Background Audio -->
-  <audio id="bg-music" loop>
+  <audio id="bg-music" loop autoplay>
     <source src="https://rudhra.site/y3huwghx.mp4" type="audio/mp4">
   </audio>
 
   <script>
-    // Play audio on first click/tap anywhere
-    document.addEventListener("click", () => {
-      const music = document.getElementById("bg-music");
+    // SEARCH FUNCTION
+    document.getElementById("searchBar").addEventListener("input", function() {
+      const query = this.value.toLowerCase();
+      const logs = document.querySelectorAll(".log");
+
+      logs.forEach(log => {
+        log.style.display = log.innerText.toLowerCase().includes(query) ? "block" : "none";
+      });
+    });
+
+    // MUSIC AUTOPLAY FIX
+    const music = document.getElementById("bg-music");
+
+    function startMusic() {
       if (music.paused) {
         music.play().catch(err => console.log("Autoplay blocked:", err));
       }
-    }, { once: true });
+    }
+
+    // Listen to ANY interaction
+    document.addEventListener("click", startMusic, { once: true });
+    document.addEventListener("scroll", startMusic, { once: true });
+    document.addEventListener("touchstart", startMusic, { once: true });
+
+    // Restart if ever paused
+    music.addEventListener("pause", () => {
+      music.play().catch(() => {});
+    });
   </script>
 
 </body>
-</html>
+  </html>
