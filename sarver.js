@@ -1,50 +1,37 @@
-const express = require('express');
-const path = require('path');
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-const server = require('http').createServer(app);
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ server });
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
 
+const server = http.createServer((req,res)=>{
+  let filePath = path.join(__dirname, req.url === '/' ? 'index.html' : req.url);
+  const ext = path.extname(filePath);
+  const mime = {'.html':'text/html','.js':'text/javascript','.css':'text/css'};
+  fs.readFile(filePath,(err,data)=>{
+    if(err){res.writeHead(404); res.end("Not found"); return;}
+    res.writeHead(200,{'Content-Type': mime[ext] || 'text/plain'});
+    res.end(data);
+  });
+});
+
+const wss = new WebSocket.Server({ server });
 let clients = [];
 
-app.use(express.static(path.join(__dirname, 'public')));
-
-wss.on('connection', ws => {
+wss.on('connection', ws=>{
   clients.push(ws);
-
-  ws.on('message', message => {
-    try {
-      const data = JSON.parse(message);
-
-      if (data.type === 'join') {
-        // Broadcast join
-        clients.forEach(client => {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ type: 'join', name: data.name, color: data.color }));
-          }
-        });
-      }
-
-      if (data.type === 'msg') {
-        // Broadcast message
-        clients.forEach(client => {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ type: 'msg', text: data.text, color: data.color }));
-          }
-        });
-      }
-    } catch (err) {
-      console.error(err);
+  ws.on('message', message=>{
+    let data = {};
+    try{data=JSON.parse(message);}catch{}
+    if(data.type==="join"){
+      broadcast(JSON.stringify({type:"join",name:data.name,color:data.color}));
+    } else if(data.type==="msg"){
+      broadcast(JSON.stringify({type:"msg",text:data.text,color:data.color}));
     }
   });
-
-  ws.on('close', () => {
-    clients = clients.filter(c => c !== ws);
-  });
+  ws.on('close',()=>{clients=clients.filter(c=>c!==ws);});
 });
 
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+function broadcast(msg){clients.forEach(c=>{if(c.readyState===WebSocket.OPEN)c.send(msg);});}
+
+const PORT = process.env.PORT || 8080;
+server.listen(PORT,()=>console.log(`Server running on port ${PORT}`));
