@@ -52,7 +52,8 @@
     document.getElementById("login").style.display="none";
     document.getElementById("chat").style.display="flex";
 
-    ws=new WebSocket("wss://echo.websocket.events");
+    // Connect to the WebSocket server automatically
+    ws=new WebSocket(`ws://${window.location.host}`);
     ws.onopen=()=>{ws.send(JSON.stringify({type:"join",name:nickname,color:userColor}))};
     ws.onmessage=(e)=>{try{
       let d=JSON.parse(e.data);
