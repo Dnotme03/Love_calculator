@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tor P2P Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin:0; font-family:monospace;
+      background:url("https://i.ibb.co/hJLBdMNx/temp.jpg") no-repeat center center fixed;
+      background-size:cover; color:#0f0;
+      height:100vh; display:flex; justify-content:center; align-items:center;
+    }
+    .glass{background:rgba(0,0,0,0.6);backdrop-filter:blur(12px);
+      border:1px solid rgba(0,255,0,0.4); border-radius:10px;
+      padding:20px; width:90%; max-width:400px; box-shadow:0 0 20px rgba(0,255,0,0.4);}
+    input,button{width:100%;padding:10px;margin:8px 0;border:none;
+      border-radius:5px;background:rgba(20,20,20,0.85);color:#0f0;font-family:inherit;}
+    button{background:#0f0;color:#000;font-weight:bold;cursor:pointer;}
+    .chat-container{display:none;flex-direction:column;height:90vh;width:95%;max-width:600px;}
+    .header{text-align:right;margin-bottom:5px;font-size:13px;opacity:0.8;}
+    .messages{flex:1;overflow-y:auto;margin-bottom:10px;padding:10px;
+      background:rgba(0,0,0,0.65);border-radius:8px;}
+    .msg{margin:5px 0;padding:6px 10px;border-radius:6px;word-wrap:break-word;}
+    .input-area{display:flex;flex-direction:column;gap:10px;}
+  </style>
+</head>
+<body>
+
+  <div class="glass" id="login">
+    <input type="text" id="nickname" placeholder="Display name">
+    <button onclick="joinRoom()">Join</button>
+  </div>
+
+  <div class="chat-container" id="chat">
+    <div class="header">Online: <span id="userCount">1</span></div>
+    <div class="messages" id="messages"></div>
+    <div class="input-area">
+      <input type="text" id="messageInput" placeholder="Type a message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+<script>
+  let ws; let nickname; let userColor; let usersOnline=1;
+
+  function getRandomColor(){const c=["#0f0","#0ff","#f0f","#ff0","#f00","#0a0","#08f","#fa0"];return c[Math.floor(Math.random()*c.length)];}
+
+  function joinRoom(){
+    nickname=document.getElementById("nickname").value||"Anonymous";
+    userColor=getRandomColor();
+    document.getElementById("login").style.display="none";
+    document.getElementById("chat").style.display="flex";
+
+    ws=new WebSocket("wss://echo.websocket.events");
+    ws.onopen=()=>{ws.send(JSON.stringify({type:"join",name:nickname,color:userColor}))};
+    ws.onmessage=(e)=>{try{
+      let d=JSON.parse(e.data);
+      if(d.type==="msg"){displayMessage(d.text,d.color);}
+      else if(d.type==="join"){usersOnline++; document.getElementById("userCount").textContent=usersOnline;}
+    }catch{}};
+  }
+
+  function sendMessage(){
+    const input=document.getElementById("messageInput"); const text=input.value.trim();
+    if(!text) return;
+    ws.send(JSON.stringify({type:"msg",text:nickname+": "+text,color:userColor}));
+    input.value="";
+  }
+
+  function displayMessage(text,color){
+    const div=document.createElement("div"); div.classList.add("msg");
+    div.style.background=color+"20"; div.style.borderLeft="4px solid "+color;
+    div.textContent=text; document.getElementById("messages").appendChild(div);
+    const m=document.getElementById("messages"); m.scrollTop=m.scrollHeight;
+  }
+</script>
+</body>
+</html>
