@@ -41,39 +41,116 @@
     </div>
   </div>
 
+<!-- Firebase & CryptoJS -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
 <script>
-  let ws; let nickname; let userColor; let usersOnline=1;
+  // --- Firebase Config ---
+  const firebaseConfig = {
+    apiKey: "AIzaSyAcaZQFO9IOUt60hhKjG2K2eVkV1kHXf1M",
+    authDomain: "chat-room-9f262.firebaseapp.com",
+    projectId: "chat-room-9f262",
+    storageBucket: "chat-room-9f262.firebasestorage.app",
+    messagingSenderId: "454201377123",
+    appId: "1:454201377123:web:1a2cb2875345385a701356"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-  function getRandomColor(){const c=["#0f0","#0ff","#f0f","#ff0","#f00","#0a0","#08f","#fa0"];return c[Math.floor(Math.random()*c.length)];}
+  // --- Chat Variables ---
+  let nickname, userColor; 
+  let usersOnline = 1;
 
-  function joinRoom(){
+  // --- Random Color ---
+  function getRandomColor(){
+    const c=["#0f0","#0ff","#f0f","#ff0","#f00","#0a0","#08f","#fa0"];
+    return c[Math.floor(Math.random()*c.length)];
+  }
+
+  // --- Double Encryption ---
+  const SECRET1 = "firstSecretKey123";
+  const SECRET2 = "secondSecretKey456";
+
+  function doubleEncrypt(message){
+    const first = CryptoJS.AES.encrypt(message, SECRET1).toString();
+    const second = CryptoJS.AES.encrypt(first, SECRET2).toString();
+    return second;
+  }
+
+  function doubleDecrypt(cipher){
+    try{
+      const first = CryptoJS.AES.decrypt(cipher, SECRET2).toString(CryptoJS.enc.Utf8);
+      const second = CryptoJS.AES.decrypt(first, SECRET1).toString(CryptoJS.enc.Utf8);
+      return second;
+    }catch{return "[Unable to decrypt]";}
+  }
+
+  // --- Join Room ---
+  async function joinRoom(){
     nickname=document.getElementById("nickname").value||"Anonymous";
     userColor=getRandomColor();
     document.getElementById("login").style.display="none";
     document.getElementById("chat").style.display="flex";
 
-    ws=new WebSocket("wss://echo.websocket.events");
-    ws.onopen=()=>{ws.send(JSON.stringify({type:"join",name:nickname,color:userColor}))};
-    ws.onmessage=(e)=>{try{
-      let d=JSON.parse(e.data);
-      if(d.type==="msg"){displayMessage(d.text,d.color);}
-      else if(d.type==="join"){usersOnline++; document.getElementById("userCount").textContent=usersOnline;}
-    }catch{}};
+    // Real-time messages listener
+    db.collection("messages").orderBy("timestamp","asc")
+      .onSnapshot(snapshot => {
+        document.getElementById("messages").innerHTML = ""; // clear and reload
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const text = doubleDecrypt(data.text);
+          displayMessage(text, data.color);
+        });
+      });
+
+    // Start updating online users
+    setInterval(updateOnlineUsers, 2000);
   }
 
-  function sendMessage(){
-    const input=document.getElementById("messageInput"); const text=input.value.trim();
+  // --- Send Message ---
+  async function sendMessage(){
+    const input=document.getElementById("messageInput"); 
+    const text=input.value.trim();
     if(!text) return;
-    ws.send(JSON.stringify({type:"msg",text:nickname+": "+text,color:userColor}));
+
+    const messageObj = {
+      text: doubleEncrypt(nickname+": "+text),
+      color: userColor,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    await db.collection("messages").add(messageObj);
     input.value="";
   }
 
+  // --- Display Message ---
   function displayMessage(text,color){
-    const div=document.createElement("div"); div.classList.add("msg");
-    div.style.background=color+"20"; div.style.borderLeft="4px solid "+color;
-    div.textContent=text; document.getElementById("messages").appendChild(div);
-    const m=document.getElementById("messages"); m.scrollTop=m.scrollHeight;
+    const div=document.createElement("div"); 
+    div.classList.add("msg");
+    div.style.background=color+"20"; 
+    div.style.borderLeft="4px solid "+color;
+    div.textContent=text; 
+    document.getElementById("messages").appendChild(div);
+    const m=document.getElementById("messages"); 
+    m.scrollTop=m.scrollHeight;
   }
+
+  // --- Online Users Tracking ---
+  async function updateOnlineUsers(){
+    const userRef = db.collection("online").doc(nickname);
+    await userRef.set({timestamp: firebase.firestore.FieldValue.serverTimestamp()});
+
+    const now = new Date();
+    const snapshot = await db.collection("online")
+      .where("timestamp", ">", new Date(now.getTime() - 5000))
+      .get();
+
+    usersOnline = snapshot.size;
+    document.getElementById("userCount").textContent = usersOnline;
+  }
+
 </script>
 </body>
-</html>
+                                                                                       </html>
