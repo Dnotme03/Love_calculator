@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dex-404</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #121212;
+      color: #fff;
+    }
+
+    /* Top bar */
+    .topbar {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      background-color: #000;
+      border-bottom: 2px solid #b91111;
+    }
+
+    .logo {
+      width: 40px;
+      height: auto;
+      margin-right: 12px;
+    }
+
+    .title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    /* Cards layout */
+    #cardsContainer {
+      display: grid;
+      gap: 20px;
+      padding: 20px;
+      justify-content: center;
+    }
+
+    /* 1 per row (default mobile) */
+    #cardsContainer {
+      grid-template-columns: 1fr;
+    }
+
+    /* 3 per row (desktop) */
+    @media (min-width: 900px) {
+      #cardsContainer {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .card {
+      width: 100%;
+      max-width: 280px;
+      height: 420px;
+      background-color: #2a2a2a;
+      border: 2px solid #b91111;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .card-header {
+      background-color: #333;
+      padding: 8px;
+      border-bottom: 1px solid #d91818;
+      font-size: 11px;
+      color: #888;
+      text-align: center;
+    }
+
+    .card-image img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      flex: 1;
+      padding: 12px;
+      background: #1e1e1e;
+      color: #aaa;
+      font-size: 10px;
+      overflow-y: auto;
+    }
+
+    .company-name {
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .company-details p {
+      margin: 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .icon {
+      width: 12px;
+      height: 12px;
+    }
+
+    .card-footer {
+      background: #2a5d31;
+      padding: 8px;
+      font-size: 9px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid #da0a0a;
+    }
+
+    .date-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .go-open {
+      background: #444;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 9px;
+      text-decoration: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .go-open:hover {
+      background: #ffeb3b;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <img src="https://files.catbox.moe/o8630v.png" alt="404-GOT Logo" class="logo">
+    <div class="title">DEX-404</div>
+  </header>
+
+  <div id="cardsContainer"></div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyAcaZQFO9IOUt60hhKjG2K2eVkV1kHXf1M",
+  authDomain: "chat-room-9f262.firebaseapp.com",
+  projectId: "chat-room-9f262",
+  storageBucket: "chat-room-9f262.firebasestorage.app",
+  messagingSenderId: "454201377123",
+  appId: "1:454201377123:web:1a2cb2875345385a701356"
+};
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    async function loadCards() {
+      const container = document.getElementById("cardsContainer");
+      container.innerHTML = "";
+
+      const snapshot = await db.collection("cards").orderBy("createdAt", "desc").get();
+      if (snapshot.empty) {
+        container.innerHTML = "<p style='color:#888;text-align:center;'>No Data available</p>";
+        return;
+      }
+
+      snapshot.forEach(doc => {
+        const card = doc.data();
+        const cardHTML = `
+          <div class="card">
+            <div class="card-header">${card.headerText}</div>
+            <div class="card-image">
+              <img src="${card.imageUrl}" alt="Image">
+            </div>
+            <div class="card-content">
+              <div class="company-name">${card.name}</div>
+              <div class="company-details">
+                <p><img src="https://files.catbox.moe/3rfftm.png" class="icon"> ${card.location}</p>
+                <p><img src="https://files.catbox.moe/tpdqr6.png" class="icon"> ${card.fileSize}</p>
+                <p>${card.description}</p>
+              </div>
+            </div>
+            <div class="card-footer">
+              <div>Published:</div>
+              <div class="date-info">
+                <span><img src="https://files.catbox.moe/2uqaou.png" class="icon"> ${card.publishDate}</span>
+                <a href="${card.openUrl}" target="_blank" class="go-open">
+                  <img src="https://files.catbox.moe/tpdqr6.png" class="icon"> Go Open
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+        container.innerHTML += cardHTML;
+      });
+    }
+
+    loadCards();
+  </script>
+</body>
+  </html>
