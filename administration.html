@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Add Card</title>
+</head>
+<body style="background:#111; color:#fff; font-family:Arial; padding:20px;">
+  <h2>Add New Card</h2>
+  <form id="cardForm">
+    <label>Header Text:</label><br>
+    <input type="text" id="headerText" placeholder="WWW.EXAMPLE.COM" required><br><br>
+
+    <label>Company Name:</label><br>
+    <input type="text" id="name" placeholder="EG NAME" required><br><br>
+
+    <label>Location:</label><br>
+    <input type="text" id="location" placeholder="Enter location" required><br><br>
+
+    <label>File Size:</label><br>
+    <input type="text" id="fileSize" placeholder="Eg. 6.96 TB" required><br><br>
+
+    <label>Description:</label><br>
+    <textarea id="description" placeholder="Enter description" required></textarea><br><br>
+
+    <label>Publish Date:</label><br>
+    <input type="text" id="publishDate" placeholder="24 February 2025" required><br><br>
+
+    <label>Open URL:</label><br>
+    <input type="url" id="openUrl" placeholder="https://example.com" required><br><br>
+
+    <label>Upload Image:</label><br>
+    <input type="file" id="imageFile" accept="image/*" required><br><br>
+
+    <button type="submit">Save Card</button>
+  </form>
+
+  <p id="status"></p>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+  <script>
+    // 🔹 Your Firebase Config
+    const firebaseConfig = {
+  apiKey: "AIzaSyAcaZQFO9IOUt60hhKjG2K2eVkV1kHXf1M",
+  authDomain: "chat-room-9f262.firebaseapp.com",
+  projectId: "chat-room-9f262",
+  storageBucket: "chat-room-9f262.firebasestorage.app",
+  messagingSenderId: "454201377123",
+  appId: "1:454201377123:web:1a2cb2875345385a701356"
+};
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    document.getElementById("cardForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      document.getElementById("status").innerText = "Uploading...";
+
+      const file = document.getElementById("imageFile").files[0];
+      if (!file) return alert("Please select an image");
+
+      try {
+        // Upload image to Firebase Storage
+        const storageRef = storage.ref("cards/" + Date.now() + "_" + file.name);
+        await storageRef.put(file);
+        const imageUrl = await storageRef.getDownloadURL();
+
+        // Save card to Firestore
+        await db.collection("cards").add({
+          headerText: document.getElementById("headerText").value,
+          name: document.getElementById("name").value,
+          location: document.getElementById("location").value,
+          fileSize: document.getElementById("fileSize").value,
+          description: document.getElementById("description").value,
+          publishDate: document.getElementById("publishDate").value,
+          openUrl: document.getElementById("openUrl").value,
+          imageUrl: imageUrl,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        document.getElementById("status").innerText = "✅ Card saved successfully!";
+        document.getElementById("cardForm").reset();
+      } catch (err) {
+        console.error(err);
+        document.getElementById("status").innerText = "❌ Error: " + err.message;
+      }
+    });
+  </script>
+</body>
+                                                                                      </html>
