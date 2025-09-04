@@ -158,13 +158,13 @@
 
   <script>
     const firebaseConfig = {
-  apiKey: "AIzaSyAcaZQFO9IOUt60hhKjG2K2eVkV1kHXf1M",
-  authDomain: "chat-room-9f262.firebaseapp.com",
-  projectId: "chat-room-9f262",
-  storageBucket: "chat-room-9f262.firebasestorage.app",
-  messagingSenderId: "454201377123",
-  appId: "1:454201377123:web:1a2cb2875345385a701356"
-};
+      apiKey: "AIzaSyAcaZQFO9IOUt60hhKjG2K2eVkV1kHXf1M",
+      authDomain: "chat-room-9f262.firebaseapp.com",
+      projectId: "chat-room-9f262",
+      storageBucket: "chat-room-9f262.appspot.com", // ✅ FIXED HERE
+      messagingSenderId: "454201377123",
+      appId: "1:454201377123:web:1a2cb2875345385a701356"
+    };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
@@ -212,4 +212,4 @@
     loadCards();
   </script>
 </body>
-  </html>
+</html>
