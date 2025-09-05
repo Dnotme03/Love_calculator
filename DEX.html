@@ -6,10 +6,13 @@
   <title>Dex-404</title>
   <style>
     body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
+      font-family: 'Courier New', monospace;
       background-color: #121212;
-      color: #fff;
+      padding: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
 
     /* Top bar */
@@ -161,7 +164,7 @@
       apiKey: "AIzaSyAcaZQFO9IOUt60hhKjG2K2eVkV1kHXf1M",
       authDomain: "chat-room-9f262.firebaseapp.com",
       projectId: "chat-room-9f262",
-      storageBucket: "chat-room-9f262.appspot.com", //  FIXED HERE
+      storageBucket: "chat-room-9f262.appspot.com", // ✅ FIXED HERE
       messagingSenderId: "454201377123",
       appId: "1:454201377123:web:1a2cb2875345385a701356"
     };
@@ -189,17 +192,17 @@
             <div class="card-content">
               <div class="company-name">${card.name}</div>
               <div class="company-details">
-                <p><img src="https://files.catbox.moe/3rfftm.png" class="icon"> ${card.location}</p>
-                <p><img src="https://files.catbox.moe/tpdqr6.png" class="icon"> ${card.fileSize}</p>
+                <p><img src="https://files.catbox.moe/nua1pc.png" class="icon"> ${card.location}</p>
+                <p><img src="https://files.catbox.moe/7v6j2y.png" class="icon"> ${card.fileSize}</p>
                 <p>${card.description}</p>
               </div>
             </div>
             <div class="card-footer">
               <div>Published:</div>
               <div class="date-info">
-                <span><img src="https://files.catbox.moe/2uqaou.png" class="icon"> ${card.publishDate}</span>
+                <span><img src="https://files.catbox.moe/9zifnd.png" class="icon"> ${card.publishDate}</span>
                 <a href="${card.openUrl}" target="_blank" class="go-open">
-                  <img src="https://files.catbox.moe/tpdqr6.png" class="icon"> Go Open
+                  <img src="https://files.catbox.moe/7v6j2y.png" class="icon"> Go Open
                 </a>
               </div>
             </div>
