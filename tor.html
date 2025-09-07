@@ -2,38 +2,108 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tor P2P Chat</title>
+  <title>Chat Room</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      margin:0; font-family:monospace;
-      background:url("https://i.ibb.co/hJLBdMNx/temp.jpg") no-repeat center center fixed;
-      background-size:cover; color:#0f0;
-      height:100vh; display:flex; justify-content:center; align-items:center;
+      margin:0;
+      font-family:monospace;
+      background:url("https://i.ibb.co/bj8X2pk7/temp.jpg") no-repeat center center fixed;
+      background-size:cover; 
+      color:#edebeb; 
+      height:100vh; 
+      display:flex; 
+      justify-content:center; 
+      align-items:center;
     }
-    .glass{background:rgba(0,0,0,0.6);backdrop-filter:blur(12px);
-      border:1px solid rgba(0,255,0,0.4); border-radius:10px;
-      padding:20px; width:90%; max-width:400px; box-shadow:0 0 20px rgba(0,255,0,0.4);}
-    input,button{width:100%;padding:10px;margin:8px 0;border:none;
-      border-radius:5px;background:rgba(20,20,20,0.85);color:#0f0;font-family:inherit;}
-    button{background:#0f0;color:#000;font-weight:bold;cursor:pointer;}
-    .chat-container{display:none;flex-direction:column;height:90vh;width:95%;max-width:600px;}
-    .header{text-align:right;margin-bottom:5px;font-size:13px;opacity:0.8;}
-    .messages{flex:1;overflow-y:auto;margin-bottom:10px;padding:10px;
-      background:rgba(0,0,0,0.65);border-radius:8px;}
-    .msg{margin:5px 0;padding:6px 10px;border-radius:6px;word-wrap:break-word;}
-    .input-area{display:flex;flex-direction:column;gap:10px;}
+    .glass{
+      background:rgba(10,10,10,0.7);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(198,40,40,0.4);
+      border-radius:10px;
+      padding:20px;
+      width:90%; 
+      max-width:400px;
+      box-shadow:0 0 20px rgba(198,40,40,0.3);
+    }
+    input{
+      width:100%; 
+      padding:10px; 
+      margin:8px 0;
+      border:none; 
+      border-radius:5px;
+      background:rgba(20,20,20,0.9); 
+      color:#aaa4a4;
+      font-family:inherit;
+    }
+    button{
+      width:100%; 
+      padding:10px; 
+      margin:8px 0;
+      border:none; 
+      border-radius:5px;
+      background:#912828;
+      color:#fff; 
+      font-weight:bold;
+      cursor:pointer; 
+      box-shadow:0 0 8px rgba(198,40,40,0.4);
+      transition:0.2s ease-in-out;
+    }
+    button:hover{ 
+      background:#b71c1c; 
+      box-shadow:0 0 12px rgba(183,28,28,0.5);
+    }
+
+    .chat-container{
+      display:none; 
+      flex-direction:column;
+      height:100vh; 
+      width:100%; 
+      max-width:600px;
+      padding:10px; 
+      box-sizing:border-box;
+    }
+    .header{
+      text-align:right; 
+      margin-bottom:5px;
+      font-size:13px; 
+      opacity:0.9; 
+      color:#ffffff;
+      text-shadow:0 0 5px #ffffff;
+    }
+    .messages{
+      flex:1; 
+      overflow-y:auto; 
+      margin-bottom:10px; 
+      padding:10px;
+      background:rgba(0,0,0,0.55);
+      border-radius: 14px;
+      border:2px solid rgba(255,255,255,0.3);
+      backdrop-filter:blur(8px);
+      font-family:monospace;
+    }
+    .msg{ 
+      margin:5px 0; 
+      padding:6px 10px;
+      border-radius:6px; 
+      word-wrap:break-word;
+    }
+    .input-area{
+      display:flex; 
+      flex-direction:column; 
+      gap:10px;
+    }
   </style>
 </head>
 <body>
 
   <div class="glass" id="login">
-    <input type="text" id="nickname" placeholder="Display name">
+    <input type="text" id="nickname" placeholder="Display Name">
     <button onclick="joinRoom()">Join</button>
   </div>
 
   <div class="chat-container" id="chat">
-    <div class="header">Online: <span id="userCount">1</span></div>
+    <div class="header">online: <span id="userCount">1</span></div>
     <div class="messages" id="messages"></div>
     <div class="input-area">
       <input type="text" id="messageInput" placeholder="Type a message...">
@@ -47,7 +117,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
 <script>
-  // --- Firebase Config ---
   const firebaseConfig = {
     apiKey: "AIzaSyAcaZQFO9IOUt60hhKjG2K2eVkV1kHXf1M",
     authDomain: "chat-room-9f262.firebaseapp.com",
@@ -59,17 +128,17 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
-  // --- Chat Variables ---
   let nickname, userColor; 
   let usersOnline = 1;
 
-  // --- Random Color ---
-  function getRandomColor(){
-    const c=["#0f0","#0ff","#f0f","#ff0","#f00","#0a0","#08f","#fa0"];
-    return c[Math.floor(Math.random()*c.length)];
+  function getRandomColor() {
+    const matteColors = [
+      "#c62828", "#2e7d32", "#1565c0", "#6a1b9a", "#ef6c00",
+      "#00897b", "#ad1457", "#4527a0", "#283593", "#455a64"
+    ];
+    return matteColors[Math.floor(Math.random() * matteColors.length)];
   }
 
-  // --- Double Encryption ---
   const SECRET1 = "firstSecretKey123";
   const SECRET2 = "secondSecretKey456";
 
@@ -84,20 +153,18 @@
       const first = CryptoJS.AES.decrypt(cipher, SECRET2).toString(CryptoJS.enc.Utf8);
       const second = CryptoJS.AES.decrypt(first, SECRET1).toString(CryptoJS.enc.Utf8);
       return second;
-    }catch{return "[Unable to decrypt]";}
+    }catch{return "[unable to decrypt]";}
   }
 
-  // --- Join Room ---
   async function joinRoom(){
     nickname=document.getElementById("nickname").value||"Anonymous";
     userColor=getRandomColor();
     document.getElementById("login").style.display="none";
     document.getElementById("chat").style.display="flex";
 
-    // Real-time messages listener
     db.collection("messages").orderBy("timestamp","asc")
       .onSnapshot(snapshot => {
-        document.getElementById("messages").innerHTML = ""; // clear and reload
+        document.getElementById("messages").innerHTML = "";
         snapshot.forEach(doc => {
           const data = doc.data();
           const text = doubleDecrypt(data.text);
@@ -105,11 +172,9 @@
         });
       });
 
-    // Start updating online users
     setInterval(updateOnlineUsers, 2000);
   }
 
-  // --- Send Message ---
   async function sendMessage(){
     const input=document.getElementById("messageInput"); 
     const text=input.value.trim();
@@ -125,7 +190,6 @@
     input.value="";
   }
 
-  // --- Display Message ---
   function displayMessage(text,color){
     const div=document.createElement("div"); 
     div.classList.add("msg");
@@ -137,7 +201,6 @@
     m.scrollTop=m.scrollHeight;
   }
 
-  // --- Online Users Tracking ---
   async function updateOnlineUsers(){
     const userRef = db.collection("online").doc(nickname);
     await userRef.set({timestamp: firebase.firestore.FieldValue.serverTimestamp()});
@@ -151,6 +214,17 @@
     document.getElementById("userCount").textContent = usersOnline;
   }
 
+/* Auto delete messages older than 5 minutes */
+  setInterval(async () => {
+    const now = new Date();
+    const cutoff = new Date(now.getTime() - 5 * 60 * 1000); // 5 minutes ago
+    const oldMessages = await db.collection("messages")
+      .where("timestamp", "<", cutoff)
+      .get();
+    oldMessages.forEach(doc => {
+      db.collection("messages").doc(doc.id).delete();
+    });
+  }, 5000); // check every 5 seconds
 </script>
 </body>
-                                                                                       </html>
+</html>
