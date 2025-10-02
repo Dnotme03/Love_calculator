@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Image Generator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: #121212;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #1e1e1e;
+      border-radius: 12px;
+    }
+    header h1 {
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+    }
+    header span {
+      font-size: 12px;
+      color: #aaa;
+    }
+    .gallery-btn {
+      background: #2c2c2c;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+    .gallery-btn:hover {
+      background: #3d3d3d;
+    }
+    .prompt-box {
+      margin: 20px 0;
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 600px;
+    }
+    .prompt-box input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #1e1e1e;
+      color: #fff;
+      font-size: 14px;
+    }
+    .prompt-box button {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      background: #2c2c2c;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .prompt-box button:hover {
+      background: #3a3a3a;
+    }
+    .progress-container {
+      width: 100%;
+      max-width: 600px;
+      height: 8px;
+      background: #1e1e1e;
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 15px 0;
+      display: none;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #4cafef;
+      transition: width 0.3s ease;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      width: 100%;
+      max-width: 900px;
+      margin-top: 20px;
+    }
+    .gallery img {
+      width: 100%;
+      border-radius: 12px;
+      background: #2c2c2c;
+      padding: 5px;
+    }
+    .download-btn {
+      display: block;
+      margin-top: 8px;
+      background: #2c2c2c;
+      padding: 6px;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 13px;
+      text-decoration: none;
+      color: #fff;
+    }
+    .download-btn:hover {
+      background: #3d3d3d;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>AI Image Generator</h1>
+      <span>Developed by Dhani</span>
+    </div>
+    <a href="https://t.me/AI_HUBZ" class="gallery-btn">🖼️ ɪᴍᴀɢᴇ ɢᴀʟʟᴇʀʏ</a>
+  </header>
+
+  <div class="prompt-box">
+    <input type="text" id="promptInput" placeholder="e.g. kitten riding bike">
+    <button onclick="generateImages()">Generate</button>
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="gallery" id="gallery"></div>
+
+  <script>
+    const apiUrl = "https://api.siputzx.my.id/api/ai/flux?prompt=";
+    const botToken = "8126520680:AAHrFmG2cP0quTCgTKcOhbmOjBpLSG4T0lY";
+    const channelId = "-1002956857971";
+    const caption = "⚡ ɪᴍᴀɢᴇ ɢᴇɴᴇʀᴀᴛᴇᴅ ғʀᴏᴍ @IMAGE_HUB";
+
+    async function generateImages() {
+      const prompt = document.getElementById("promptInput").value;
+      if (!prompt) return alert("Please enter a prompt!");
+
+      document.getElementById("gallery").innerHTML = "";
+      document.querySelector(".progress-container").style.display = "block";
+
+      let progressBar = document.getElementById("progressBar");
+      progressBar.style.width = "0%";
+
+      for (let i = 1; i <= 9; i++) {
+        updateProgress(i);
+        const imgUrl = apiUrl + encodeURIComponent(prompt) + "&i=" + i;
+
+        try {
+          let response = await fetch(imgUrl);
+          let blob = await response.blob();
+          let objectUrl = URL.createObjectURL(blob);
+
+          let imgBox = document.createElement("div");
+          let img = document.createElement("img");
+          img.src = objectUrl;
+
+          let downloadBtn = document.createElement("a");
+          downloadBtn.href = objectUrl;
+          downloadBtn.download = `ai-image-${i}.png`;
+          downloadBtn.innerText = "⬇ Download";
+          downloadBtn.className = "download-btn";
+
+          imgBox.appendChild(img);
+          imgBox.appendChild(downloadBtn);
+          document.getElementById("gallery").appendChild(imgBox);
+
+          // send to Telegram channel one by one
+          let formData = new FormData();
+          formData.append("chat_id", channelId);
+          formData.append("caption", caption);
+          formData.append("photo", blob, `image${i}.png`);
+          fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, { method: "POST", body: formData });
+
+        } catch (err) {
+          console.error("Error generating image", err);
+        }
+      }
+
+      progressBar.style.width = "100%";
+      setTimeout(() => {
+        document.querySelector(".progress-container").style.display = "none";
+      }, 800);
+    }
+
+    function updateProgress(i) {
+      let progress = (i / 9) * 100;
+      document.getElementById("progressBar").style.width = progress + "%";
+    }
+  </script>
+</body>
+  </html>
