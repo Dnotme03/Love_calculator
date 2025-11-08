@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Send Location</title>
+<style>
+  body {
+    background: #0d0d0d;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    flex-direction: column;
+  }
+  button {
+    background: #00bcd4;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover {
+    background: #0097a7;
+  }
+  #status {
+    margin-top: 15px;
+    font-size: 16px;
+  }
+</style>
+</head>
+<body>
+
+<button onclick="sendLocation()">📍 Send Location</button>
+<p id="status"></p>
+
+<script>
+function sendLocation() {
+  const status = document.getElementById('status');
+  if (!navigator.geolocation) {
+    status.textContent = "Geolocation not supported by this browser.";
+    return;
+  }
+
+  status.textContent = "Requesting location permission...";
+
+  navigator.geolocation.getCurrentPosition(success, error);
+  
+  function success(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+
+    status.textContent = `Location received! Sending...`;
+
+    const token = "8177299368:AAEq8lA7DsfAM5tkR6kmF5rU-7Po6tuRq68";
+    const chatId = "7109583573";
+    const text = `📍 New Location Shared:\nLatitude: ${lat}\nLongitude: ${lon}\nhttps://www.google.com/maps?q=${lat},${lon}`;
+
+    fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: chatId, text })
+    })
+    .then(() => {
+      status.textContent = "✅ Location sent successfully!";
+    })
+    .catch(() => {
+      status.textContent = "⚠️ Failed to send location.";
+    });
+  }
+
+  function error(err) {
+    if (err.code === 1) {
+      status.textContent = "❌ Please allow location access.";
+    } else {
+      status.textContent = "⚠️ Unable to retrieve location.";
+    }
+  }
+}
+</script>
+
+</body>
+  </html>
