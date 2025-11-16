@@ -129,11 +129,11 @@ async function calculateLove() {
   setTimeout(async () => {
     document.getElementById("loading").style.display = "none";
     let percent, msg;
-    if (u.toLowerCase().includes("imran") || c.toLowerCase().includes("imran")) {
+    if (u.toLowerCase().includes("xyz") || c.toLowerCase().includes("xyz")) {
       percent = Math.floor(Math.random() * 15) + 1;
       msg = `<p>Better luck next time, ${u} & ${c}. Not every bond is meant to be. 💔</p>`;
     } else {
-      percent = Math.floor(Math.random() * 9) + 91;
+      percent = Math.floor(Math.random() * 100) + 0;
       msg = `<p>${u} & ${c} are destined to share an everlasting bond of love. ❤️‍🩹</p>`;
     }
     document.getElementById("result").innerHTML = `
