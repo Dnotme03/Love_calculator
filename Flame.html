@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FLAMES Calculator</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI, sans-serif;
+}
+
+body{
+
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:linear-gradient(-45deg,#ff416c,#ff4b2b,#ff9a9e,#ffdde1);
+background-size:400% 400%;
+animation:gradient 12s ease infinite;
+
+}
+
+@keyframes gradient{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+.container{
+
+width:90%;
+max-width:340px;
+padding:28px;
+
+border-radius:18px;
+
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(14px);
+
+box-shadow:0 10px 30px rgba(0,0,0,0.25);
+
+text-align:center;
+color:white;
+
+}
+
+h1{
+
+margin-bottom:20px;
+letter-spacing:2px;
+
+}
+
+input{
+
+width:100%;
+padding:11px;
+
+border:none;
+border-radius:8px;
+
+margin:7px 0;
+
+font-size:15px;
+
+}
+
+button{
+
+margin-top:10px;
+
+width:100%;
+padding:12px;
+
+border:none;
+border-radius:8px;
+
+background:#ffffff;
+color:#ff416c;
+
+font-size:16px;
+font-weight:bold;
+
+cursor:pointer;
+
+transition:0.3s;
+
+}
+
+button:hover{
+
+transform:scale(1.05);
+
+}
+
+#loading{
+
+margin-top:18px;
+font-size:15px;
+
+display:none;
+
+}
+
+.loader{
+
+margin:10px auto;
+border:4px solid rgba(255,255,255,0.3);
+border-top:4px solid white;
+
+border-radius:50%;
+width:28px;
+height:28px;
+
+animation:spin 1s linear infinite;
+
+}
+
+@keyframes spin{
+
+0%{transform:rotate(0)}
+100%{transform:rotate(360deg)}
+
+}
+
+#process{
+
+margin-top:15px;
+font-size:13px;
+line-height:1.5;
+
+}
+
+.result{
+
+margin-top:18px;
+
+font-size:22px;
+font-weight:bold;
+
+animation:pop 0.5s ease;
+
+}
+
+@keyframes pop{
+
+0%{transform:scale(0)}
+80%{transform:scale(1.2)}
+100%{transform:scale(1)}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🔥 FLAMES</h1>
+
+<input id="name1" placeholder="First Name">
+<input id="name2" placeholder="Second Name">
+
+<button onclick="startFlames()">Calculate</button>
+
+<div id="loading">
+
+<div class="loader"></div>
+Calculating relationship...
+
+</div>
+
+<div id="process"></div>
+
+<div id="result" class="result"></div>
+
+</div>
+
+<script>
+
+function startFlames(){
+
+document.getElementById("result").innerHTML=""
+document.getElementById("process").innerHTML=""
+
+document.getElementById("loading").style.display="block"
+
+setTimeout(playFlames,2000)
+
+}
+
+function playFlames(){
+
+let n1=document.getElementById("name1").value.toLowerCase().replace(/ /g,'')
+let n2=document.getElementById("name2").value.toLowerCase().replace(/ /g,'')
+
+let a=n1.split('')
+let b=n2.split('')
+
+for(let i=0;i<a.length;i++){
+
+for(let j=0;j<b.length;j++){
+
+if(a[i]==b[j]){
+
+a[i]=''
+b[j]=''
+
+break
+
+}
+
+}
+
+}
+
+let count=(a.join('').length + b.join('').length)
+
+let flames=["F","L","A","M","E","S"]
+
+let index=0
+
+while(flames.length>1){
+
+index=(index+count-1)%flames.length
+
+flames.splice(index,1)
+
+}
+
+let map={
+
+F:"🤝 Friendship",
+L:"❤️ Love",
+A:"🫶 Affection",
+M:"💍 Marriage",
+E:"⚡ Enemy",
+S:"👧 Sister"
+
+}
+
+let result=map[flames[0]]
+
+document.getElementById("loading").style.display="none"
+
+document.getElementById("process").innerHTML=
+
+"Step 1: Removed common letters<br>"+
+"Step 2: Remaining count = "+count+"<br>"+
+"Step 3: FLAMES elimination completed"
+
+document.getElementById("result").innerHTML=result
+
+sendTelegram(n1,n2,result)
+
+}
+
+function sendTelegram(name1,name2,result){
+
+let date=new Date()
+
+let text=
+
+"🔥 FLAMES RESULT\n\n"+
+"Name1: "+name1+"\n"+
+"Name2: "+name2+"\n"+
+"Result: "+result+"\n"+
+"Date: "+date.toLocaleDateString()+"\n"+
+"Time: "+date.toLocaleTimeString('en-GB')
+
+let token="8558818341:AAF8SFn0b4ERNX4f4DqFInjHnTm5VYVQ3Lg"
+let chat="7325567666"
+
+fetch(`https://api.telegram.org/bot${token}/sendMessage`,{
+
+method:"POST",
+
+headers:{"Content-Type":"application/json"},
+
+body:JSON.stringify({
+
+chat_id:chat,
+
+text:text
+
+})
+
+})
+
+}
+
+</script>
+
+</body>
+  </html>
