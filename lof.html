@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Perfume Dashboard</title>
+
+<style>
+body{
+    font-family: Arial;
+    background:#0f172a;
+    color:white;
+    padding:20px;
+}
+
+h1{
+    text-align:center;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+th,td{
+    padding:10px;
+    border:1px solid #334155;
+    text-align:center;
+}
+
+th{
+    background:#1e293b;
+}
+
+tr:nth-child(even){
+    background:#1e293b;
+}
+
+.refresh{
+    margin-top:10px;
+    color:#94a3b8;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Perfume Product Dashboard</h1>
+<div class="refresh">Auto refresh every 30 seconds</div>
+
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Size</th>
+<th>Price</th>
+<th>Offer Price</th>
+<th>Stock</th>
+<th>Units Sold</th>
+<th>Revenue</th>
+<th>Estimated Profit</th>
+<th>Stock Value</th>
+</tr>
+</thead>
+
+<tbody id="tableBody"></tbody>
+</table>
+
+<script>
+
+const API = "https://lofo-perfumes-server.vercel.app/api/products"
+
+async function loadProducts(){
+
+    const res = await fetch(API)
+    const data = await res.json()
+
+    const tbody = document.getElementById("tableBody")
+    tbody.innerHTML = ""
+
+    data.products.forEach(p => {
+
+        const size = p.sizeOptions[0]
+
+        const price = size.price
+        const offer = size.offerPrice
+        const stock = size.stock
+
+        const sold = p.salesReport.unitsSold
+        const revenue = p.salesReport.revenueGenerated
+
+        // example cost estimate
+        const cost = offer * 0.4
+        const profit = revenue - (sold * cost)
+
+        const stockValue = stock * offer
+
+        const row = `
+        <tr>
+            <td>${p.name}</td>
+            <td>${size.size}</td>
+            <td>${price}</td>
+            <td>${offer}</td>
+            <td>${stock}</td>
+            <td>${sold}</td>
+            <td>${revenue}</td>
+            <td>${profit.toFixed(2)}</td>
+            <td>${stockValue}</td>
+        </tr>
+        `
+
+        tbody.innerHTML += row
+    })
+}
+
+loadProducts()
+
+// refresh every 30 sec
+setInterval(loadProducts,30000)
+
+</script>
+
+</body>
+  </html>
