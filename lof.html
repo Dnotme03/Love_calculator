@@ -6,49 +6,62 @@
 
 <style>
 body{
-    font-family: Arial;
-    background:#0f172a;
-    color:white;
-    padding:20px;
+font-family:Arial;
+background:#0f172a;
+color:white;
+padding:20px;
 }
 
 h1{
-    text-align:center;
+text-align:center;
+}
+
+button{
+padding:10px 20px;
+background:#22c55e;
+border:none;
+color:white;
+font-size:16px;
+cursor:pointer;
+border-radius:5px;
+margin-bottom:20px;
+}
+
+button:hover{
+background:#16a34a;
 }
 
 table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
 }
 
 th,td{
-    padding:10px;
-    border:1px solid #334155;
-    text-align:center;
+padding:10px;
+border:1px solid #334155;
+text-align:center;
 }
 
 th{
-    background:#1e293b;
+background:#1e293b;
 }
 
 tr:nth-child(even){
-    background:#1e293b;
-}
-
-.refresh{
-    margin-top:10px;
-    color:#94a3b8;
+background:#1e293b;
 }
 </style>
+
 </head>
 
 <body>
 
 <h1>Perfume Product Dashboard</h1>
-<div class="refresh">Auto refresh every 30 seconds</div>
+
+<button onclick="loadProducts()">Refresh Data</button>
 
 <table>
+
 <thead>
 <tr>
 <th>Product</th>
@@ -58,67 +71,55 @@ tr:nth-child(even){
 <th>Stock</th>
 <th>Units Sold</th>
 <th>Revenue</th>
-<th>Estimated Profit</th>
-<th>Stock Value</th>
 </tr>
 </thead>
 
-<tbody id="tableBody"></tbody>
+<tbody id="table"></tbody>
+
 </table>
 
 <script>
 
-const API = "https://lofo-perfumes-server.vercel.app/api/products"
-
 async function loadProducts(){
 
-    const res = await fetch(API)
-    const data = await res.json()
+try{
 
-    const tbody = document.getElementById("tableBody")
-    tbody.innerHTML = ""
+const res = await fetch("https://lofo-perfumes-server.vercel.app/api/products")
 
-    data.products.forEach(p => {
+const data = await res.json()
 
-        const size = p.sizeOptions[0]
+const table = document.getElementById("table")
+table.innerHTML=""
 
-        const price = size.price
-        const offer = size.offerPrice
-        const stock = size.stock
+data.products.forEach(p=>{
 
-        const sold = p.salesReport.unitsSold
-        const revenue = p.salesReport.revenueGenerated
+const s = p.sizeOptions[0]
 
-        // example cost estimate
-        const cost = offer * 0.4
-        const profit = revenue - (sold * cost)
+table.innerHTML += `
+<tr>
+<td>${p.name}</td>
+<td>${s.size}</td>
+<td>${s.price}</td>
+<td>${s.offerPrice}</td>
+<td>${s.stock}</td>
+<td>${p.salesReport.unitsSold}</td>
+<td>${p.salesReport.revenueGenerated}</td>
+</tr>
+`
 
-        const stockValue = stock * offer
+})
 
-        const row = `
-        <tr>
-            <td>${p.name}</td>
-            <td>${size.size}</td>
-            <td>${price}</td>
-            <td>${offer}</td>
-            <td>${stock}</td>
-            <td>${sold}</td>
-            <td>${revenue}</td>
-            <td>${profit.toFixed(2)}</td>
-            <td>${stockValue}</td>
-        </tr>
-        `
+}catch(e){
 
-        tbody.innerHTML += row
-    })
+alert("API fetch failed. Check browser console.")
+
+console.log(e)
+
 }
 
-loadProducts()
-
-// refresh every 30 sec
-setInterval(loadProducts,30000)
+}
 
 </script>
 
 </body>
-  </html>
+</html>
