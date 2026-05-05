@@ -12,34 +12,23 @@ color:white;
 padding:20px;
 }
 
-h1{
-text-align:center;
-}
-
 button{
 padding:10px 20px;
 background:#22c55e;
 border:none;
 color:white;
-font-size:16px;
 cursor:pointer;
-border-radius:5px;
 margin-bottom:20px;
-}
-
-button:hover{
-background:#16a34a;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:10px;
 }
 
 th,td{
-padding:10px;
 border:1px solid #334155;
+padding:10px;
 text-align:center;
 }
 
@@ -56,49 +45,45 @@ background:#1e293b;
 
 <body>
 
-<h1>Perfume Product Dashboard</h1>
+<h2>Perfume Dashboard</h2>
 
-<button onclick="loadProducts()">Refresh Data</button>
+<button onclick="load()">Refresh</button>
 
 <table>
 
 <thead>
 <tr>
 <th>Product</th>
-<th>Size</th>
 <th>Price</th>
-<th>Offer Price</th>
+<th>Offer</th>
 <th>Stock</th>
-<th>Units Sold</th>
+<th>Sold</th>
 <th>Revenue</th>
 </tr>
 </thead>
 
-<tbody id="table"></tbody>
+<tbody id="data"></tbody>
 
 </table>
 
 <script>
 
-async function loadProducts(){
+async function load(){
 
-try{
+const res = await fetch("api.php")
+const d = await res.json()
 
-const res = await fetch("https://lofo-perfumes-server.vercel.app/api/products")
+const tbody = document.getElementById("data")
 
-const data = await res.json()
+tbody.innerHTML=""
 
-const table = document.getElementById("table")
-table.innerHTML=""
-
-data.products.forEach(p=>{
+d.products.forEach(p=>{
 
 const s = p.sizeOptions[0]
 
-table.innerHTML += `
+tbody.innerHTML += `
 <tr>
 <td>${p.name}</td>
-<td>${s.size}</td>
 <td>${s.price}</td>
 <td>${s.offerPrice}</td>
 <td>${s.stock}</td>
@@ -108,14 +93,6 @@ table.innerHTML += `
 `
 
 })
-
-}catch(e){
-
-alert("API fetch failed. Check browser console.")
-
-console.log(e)
-
-}
 
 }
 
