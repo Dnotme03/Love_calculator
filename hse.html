@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commerce - Political Science Students</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@700&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #faf3eb;
+  color: #2c1f14;
+  padding: 24px;
+  min-height: 100vh;
+}
+.container { max-width: 1320px; margin: 0 auto; }
+
+/* HEADER - Coffee Orange Gradient */
+.header {
+  background: linear-gradient(145deg, #c97e35, #b06a2a, #9a5c24);
+  padding: 28px 32px;
+  border-radius: 16px;
+  margin-bottom: 28px;
+  box-shadow: 0 8px 32px rgba(180, 100, 30, 0.2);
+}
+.header h1 {
+  font-family: 'Merriweather', serif;
+  font-size: 1.5rem;
+  color: #fef7f0;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+.header p {
+  font-size: 0.85rem;
+  color: #f0dfcc;
+  margin-top: 6px;
+  font-weight: 300;
+}
+
+/* STATS ROW */
+.stats-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.stat-box {
+  background: #fffcf7;
+  padding: 14px 22px;
+  border-radius: 12px;
+  flex: 1;
+  min-width: 120px;
+  border: 1px solid #e6d5c2;
+  box-shadow: 0 2px 8px rgba(140, 90, 40, 0.06);
+}
+.stat-box .label {
+  font-size: 0.72rem;
+  color: #8c7a68;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: 500;
+}
+.stat-box .value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.stat-box .value.earthy { color: #9a5c24; }
+.stat-box .value.green { color: #2e7d32; }
+.stat-box .value.red { color: #c62828; }
+
+/* TOOLBAR */
+.toolbar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  align-items: center;
+}
+.search-input {
+  flex: 1;
+  min-width: 220px;
+  padding: 11px 16px;
+  border: 2px solid #e6d5c2;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  background: #fffcf7;
+  color: #2c1f14;
+  transition: all 0.2s;
+}
+.search-input:focus {
+  outline: none;
+  border-color: #c97e35;
+  box-shadow: 0 0 0 3px rgba(201, 126, 53, 0.12);
+}
+.search-input::placeholder { color: #a69480; }
+
+.filter-select {
+  padding: 11px 16px;
+  border: 2px solid #e6d5c2;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  background: #fffcf7;
+  color: #2c1f14;
+  font-weight: 500;
+  cursor: pointer;
+}
+.filter-select:focus { outline: none; border-color: #c97e35; }
+
+.btn-pdf {
+  padding: 11px 26px;
+  background: linear-gradient(145deg, #c97e35, #b06a2a);
+  color: #fef7f0;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(180, 100, 30, 0.2);
+  white-space: nowrap;
+}
+.btn-pdf:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(180, 100, 30, 0.3); }
+
+/* STUDENT GRID */
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 20px;
+}
+
+/* CARD */
+.student-card {
+  background: #fffcf7;
+  border-radius: 16px;
+  border: 1px solid #e6d5c2;
+  box-shadow: 0 3px 14px rgba(140, 90, 40, 0.07);
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+.student-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(140, 90, 40, 0.12);
+}
+
+/* CARD TOP BAR */
+.card-top {
+  background: linear-gradient(135deg, #f2e6d9, #e8d9c8);
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0cebb;
+}
+.card-top .reg-number {
+  font-size: 0.75rem;
+  color: #7a6856;
+  font-weight: 500;
+  font-family: 'Courier New', monospace;
+}
+.result-tag {
+  padding: 3px 14px;
+  border-radius: 20px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.result-tag.ehs {
+  background: #e6f4ea;
+  color: #2e7d32;
+  border: 1px solid #a5d6a7;
+}
+.result-tag.nhs {
+  background: #fce8e6;
+  color: #b71c1c;
+  border: 1px solid #ef9a9a;
+}
+
+/* CARD BODY */
+.card-body { padding: 16px 18px; }
+.card-body .student-name {
+  font-family: 'Merriweather', serif;
+  font-size: 1.05rem;
+  color: #2c1f14;
+  margin-bottom: 2px;
+}
+.card-body .student-group {
+  font-size: 0.76rem;
+  color: #8c7a68;
+  margin-bottom: 14px;
+  font-weight: 400;
+}
+
+/* SUBJECT ROWS */
+.subject-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid #f0e6dc;
+  font-size: 0.8rem;
+}
+.subject-line:last-of-type { border-bottom: none; }
+.subject-line .subj-label { color: #5a4a38; font-weight: 500; }
+.subject-line .subj-score { color: #8c7a68; font-size: 0.72rem; }
+.subject-line .subj-grade {
+  font-weight: 700;
+  font-size: 0.8rem;
+  min-width: 28px;
+  text-align: right;
+}
+
+/* HIGHLIGHT POLITICAL SCIENCE */
+.subject-line.highlight {
+  background: #fcf1e6;
+  margin: 0 -4px;
+  padding: 5px 4px;
+  border-radius: 6px;
+  border-bottom: 1px solid #f0e6dc;
+}
+.subject-line.highlight .subj-label { color: #9a5c24; font-weight: 600; }
+
+/* GRADE COLORS */
+.grade-A-plus { color: #1b5e20; }
+.grade-A { color: #2e7d32; }
+.grade-B-plus { color: #558b2f; }
+.grade-B { color: #6d4c00; }
+.grade-C-plus { color: #b8732e; }
+.grade-C { color: #d84315; }
+.grade-D-plus { color: #c62828; }
+.grade-D { color: #b71c1c; }
+.grade-Ab { color: #a69480; font-style: italic; }
+
+/* CARD FOOTER */
+.card-footer {
+  padding: 10px 18px 14px;
+  border-top: 1px solid #e6d5c2;
+  display: flex;
+  justify-content: flex-end;
+}
+.btn-save-card {
+  padding: 7px 18px;
+  background: transparent;
+  border: 1.5px solid #c97e35;
+  border-radius: 8px;
+  color: #9a5c24;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-save-card:hover {
+  background: #c97e35;
+  color: #fef7f0;
+}
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #a69480;
+  font-size: 0.95rem;
+  display: none;
+}
+
+/* TOAST NOTIFICATION */
+.toast-msg {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: #2c1f14;
+  color: #fef7f0;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.18);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 999;
+}
+.toast-msg.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 640px) {
+  body { padding: 14px; }
+  .header { padding: 18px 20px; }
+  .header h1 { font-size: 1.1rem; }
+  .student-grid { grid-template-columns: 1fr; }
+  .toolbar { flex-direction: column; }
+  .search-input { min-width: 100%; }
+  .stat-box { min-width: 80px; padding: 10px 14px; }
+}
+
+@media print {
+  body { background: #fff; padding: 0; }
+  .toolbar, .card-footer, .btn-pdf, .btn-save-card { display: none !important; }
+  .student-card { break-inside: avoid; border: 1px solid #ccc; box-shadow: none; }
+  .header { border-radius: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Commerce &mdash; Political Science Students</h1>
+    <p>10030-GOVT HSS, VELLIYODE, KOZHIKKODE &middot; HSE Second Year March 2026</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="label">Total Students</div>
+      <div class="value earthy" id="statTotal">0</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">Eligible (EHS)</div>
+      <div class="value green" id="statEHS">0</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">Not Eligible (NHS)</div>
+      <div class="value red" id="statNHS">0</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <input class="search-input" id="searchBox" placeholder="Search by name, register number, or subject..." oninput="renderCards()">
+    <select class="filter-select" id="resultFilter" onchange="renderCards()">
+      <option value="all">All Results</option>
+      <option value="EHS">Eligible for Higher Studies</option>
+      <option value="NHS">Not Eligible for Higher Studies</option>
+    </select>
+    <select class="filter-select" id="gradeFilter" onchange="renderCards()">
+      <option value="all">Political Science &mdash; All Grades</option>
+      <option value="A+">A+</option>
+      <option value="A">A</option>
+      <option value="B+">B+</option>
+      <option value="B">B</option>
+      <option value="C+">C+</option>
+      <option value="C">C</option>
+      <option value="D+">D+</option>
+      <option value="D">D</option>
+    </select>
+    <button class="btn-pdf" onclick="downloadAllPDF()">Download All as PDF</button>
+  </div>
+
+  <div class="student-grid" id="cardGrid"></div>
+  <div class="empty-state" id="emptyMsg">No students match your search or filter criteria.</div>
+</div>
+
+<div class="toast-msg" id="toast"></div>
+
+<script>
+// ========== LOAD DATA FROM data.json ==========
+let students = [];
+
+function loadData() {
+  fetch('data.json')
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(json => {
+      students = json.d || [];
+      renderCards();
+    })
+    .catch(err => {
+      document.getElementById('cardGrid').innerHTML =
+        '<div style="text-align:center;padding:60px 20px;color:#c62828;font-size:0.95rem;grid-column:1/-1;">Failed to load data.json: ' + err.message + '</div>';
+    });
+}
+
+// ========== UTILITY ==========
+function gradeClass(g) {
+  if (g === 'A+') return 'grade-A-plus';
+  if (g === 'A') return 'grade-A';
+  if (g === 'B+') return 'grade-B-plus';
+  if (g === 'B') return 'grade-B';
+  if (g === 'C+') return 'grade-C-plus';
+  if (g === 'C') return 'grade-C';
+  if (g === 'D+') return 'grade-D-plus';
+  if (g === 'D') return 'grade-D';
+  if (g === 'Ab') return 'grade-Ab';
+  return '';
+}
+
+function getSubj(student, name) {
+  const fullNames = {
+    'BSFM': 'BUSINESS STUDIES WITH FUNCTIONAL MANAGEMENT',
+    'ACCA': 'ACCOUNTANCY WITH COMPUTER ACCOUNTING',
+    'POLITICAL SCIENCE': 'POLITICAL SCIENCE'
+  };
+  const target = fullNames[name] || name;
+  for (const s of student.s) {
+    if (s[0] === target) return s;
+  }
+  return null;
+}
+
+function shortName(full) {
+  const map = {
+    'BUSINESS STUDIES WITH FUNCTIONAL MANAGEMENT': 'BSFM',
+    'ACCOUNTANCY WITH COMPUTER ACCOUNTING': 'ACCA',
+    'ACCOUNTANCY WITH AFS': 'ACCA(AFS)',
+    'POLITICAL SCIENCE': 'Pol Science'
+  };
+  return map[full] || full;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('visible');
+  setTimeout(() => t.classList.remove('visible'), 2200);
+}
+
+// ========== RENDER ==========
+function renderCards() {
+  const query = document.getElementById('searchBox').value.toLowerCase().trim();
+  const resultFilter = document.getElementById('resultFilter').value;
+  const gradeFilter = document.getElementById('gradeFilter').value;
+
+  const filtered = students.filter(st => {
+    if (resultFilter !== 'all' && st.re !== resultFilter) return false;
+
+    const ps = getSubj(st, 'POLITICAL SCIENCE');
+    if (gradeFilter !== 'all') {
+      if (!ps || ps[4] !== gradeFilter) return false;
+    }
+
+    if (query) {
+      const nameMatch = st.n.toLowerCase().includes(query);
+      const regMatch = String(st.r).includes(query);
+      const subjMatch = st.s.some(s => s[0].toLowerCase().includes(query));
+      if (!nameMatch && !regMatch && !subjMatch) return false;
+    }
+
+    return true;
+  });
+
+  // Stats
+  document.getElementById('statTotal').textContent = students.length;
+  document.getElementById('statEHS').textContent = students.filter(s => s.re === 'EHS').length;
+  document.getElementById('statNHS').textContent = students.filter(s => s.re === 'NHS').length;
+
+  const grid = document.getElementById('cardGrid');
+  const empty = document.getElementById('emptyMsg');
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  let html = '';
+  for (const st of filtered) {
+    const ps = getSubj(st, 'POLITICAL SCIENCE');
+    const psGrade = ps ? ps[4] : '';
+    const psScore = ps ? (ps[3] !== null && ps[3] !== undefined ? ps[3] : 'Ab') : '';
+
+    const eng = getSubj(st, 'ENGLISH');
+    const lang2 = st.s.filter(s => s[0] !== 'ENGLISH' && s[0] !== 'POLITICAL SCIENCE' && s[0] !== 'BSFM' && s[0] !== 'ACCA' && s[0] !== 'ECONOMICS' && s[0] !== 'ACCOUNTANCY WITH COMPUTER ACCOUNTING' && s[0] !== 'BUSINESS STUDIES WITH FUNCTIONAL MANAGEMENT' && s[0] !== 'ACCOUNTANCY WITH AFS')[0];
+    const lang2Name = lang2 ? shortName(lang2[0]) : '';
+    const lang2Grade = lang2 ? lang2[4] : '';
+
+    const bsfm = getSubj(st, 'BSFM');
+    const acca = getSubj(st, 'ACCA');
+    const eco = getSubj(st, 'ECONOMICS');
+
+    html += `
+<div class="student-card">
+  <div class="card-top">
+    <span class="reg-number">${st.r}</span>
+    <span class="result-tag ${st.re === 'EHS' ? 'ehs' : 'nhs'}">${st.re === 'EHS' ? 'Eligible' : 'Not Eligible'}</span>
+  </div>
+  <div class="card-body">
+    <div class="student-name">${st.n}</div>
+    <div class="student-group">${st.g}</div>
+
+    <div class="subject-line">
+      <span class="subj-label">English</span>
+      <span class="subj-score">CE ${eng ? eng[1] : '-'} · TE ${eng ? eng[2] : '-'}</span>
+      <span class="subj-grade ${gradeClass(eng ? eng[4] : '')}">${eng ? eng[4] : '-'}</span>
+    </div>
+
+    ${lang2 ? `
+    <div class="subject-line">
+      <span class="subj-label">${lang2Name}</span>
+      <span class="subj-score">CE ${lang2[1]} · TE ${lang2[2]}</span>
+      <span class="subj-grade ${gradeClass(lang2[4])}">${lang2[4]}</span>
+    </div>` : ''}
+
+    ${bsfm ? `
+    <div class="subject-line">
+      <span class="subj-label">BSFM</span>
+      <span class="subj-score">CE ${bsfm[1]} · TE ${bsfm[2]}</span>
+      <span class="subj-grade ${gradeClass(bsfm[4])}">${bsfm[4]}</span>
+    </div>` : ''}
+
+    ${acca ? `
+    <div class="subject-line">
+      <span class="subj-label">ACCA</span>
+      <span class="subj-score">CE ${acca[1]} · TE ${acca[2]}</span>
+      <span class="subj-grade ${gradeClass(acca[4])}">${acca[4]}</span>
+    </div>` : ''}
+
+    ${eco ? `
+    <div class="subject-line">
+      <span class="subj-label">Economics</span>
+      <span class="subj-score">CE ${eco[1]} · TE ${eco[2]}</span>
+      <span class="subj-grade ${gradeClass(eco[4])}">${eco[4]}</span>
+    </div>` : ''}
+
+    ${ps ? `
+    <div class="subject-line highlight">
+      <span class="subj-label">Political Science</span>
+      <span class="subj-score">CE ${ps[1]} · TE ${ps[2]} · Total ${ps[3] !== null && ps[3] !== undefined ? ps[3] : '-'}</span>
+      <span class="subj-grade ${gradeClass(ps[4])}">${ps[4]}</span>
+    </div>` : ''}
+  </div>
+  <div class="card-footer">
+    <button class="btn-save-card" onclick="saveCardAsImage(this, '${st.r}')">Save as Image</button>
+  </div>
+</div>`;
+  }
+
+  grid.innerHTML = html;
+}
+
+// ========== SAVE SINGLE CARD AS IMAGE ==========
+function saveCardAsImage(btn, regNo) {
+  const card = btn.closest('.student-card');
+  html2canvas(card, {
+    scale: 2.5,
+    backgroundColor: '#fffcf7',
+    useCORS: true,
+    logging: false
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = `student_${regNo}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast('Saved: ' + regNo);
+  }).catch(() => {
+    showToast('Error saving image');
+  });
+}
+
+// ========== DOWNLOAD ALL AS PDF ==========
+function downloadAllPDF() {
+  const cards = document.querySelectorAll('.student-card');
+  if (cards.length === 0) {
+    showToast('No cards to download');
+    return;
+  }
+
+  showToast('Generating PDF...');
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p', 'mm', 'a4');
+  const pageW = 210;
+  const pageH = 297;
+  let yPos = 10;
+  let first = true;
+
+  // Title page
+  pdf.setFontSize(14);
+  pdf.setTextColor(154, 92, 36);
+  pdf.text('Commerce - Political Science Students', 105, 20, { align: 'center' });
+  pdf.setFontSize(10);
+  pdf.setTextColor(100, 80, 60);
+  pdf.text('10030-GOVT HSS, VELLIYODE, KOZHIKKODE  |  HSE Second Year March 2026', 105, 28, { align: 'center' });
+  yPos = 36;
+
+  const renderPromises = [];
+  cards.forEach(card => {
+    renderPromises.push(
+      html2canvas(card, {
+        scale: 2,
+        backgroundColor: '#fffcf7',
+        useCORS: true,
+        logging: false
+      })
+    );
+  });
+
+  Promise.all(renderPromises).then(canvases => {
+    canvases.forEach((canvas, idx) => {
+      const imgData = canvas.toDataURL('image/png');
+      const imgW = pageW - 20;
+      const imgH = (canvas.height / canvas.width) * imgW;
+
+      if (yPos + imgH > pageH - 15) {
+        pdf.addPage();
+        yPos = 10;
+      }
+
+      pdf.addImage(imgData, 'PNG', 10, yPos, imgW, imgH);
+      yPos += imgH + 8;
+    });
+
+    pdf.save('commerce_political_science_students.pdf');
+    showToast('PDF downloaded successfully');
+  }).catch(() => {
+    showToast('Error generating PDF');
+  });
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', loadData);
+</script>
+</body>
+  </html>
