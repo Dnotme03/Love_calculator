@@ -7,7 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@600;700&display=swap');
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -19,7 +19,7 @@ body {
 }
 .container { max-width: 1320px; margin: 0 auto; }
 
-/* HEADER - Coffee Orange Gradient */
+/* HEADER */
 .header {
   background: linear-gradient(145deg, #c97e35, #b06a2a, #9a5c24);
   padding: 28px 32px;
@@ -41,7 +41,7 @@ body {
   font-weight: 300;
 }
 
-/* STATS ROW */
+/* STATS */
 .stats-row {
   display: flex;
   gap: 16px;
@@ -98,7 +98,6 @@ body {
   box-shadow: 0 0 0 3px rgba(201, 126, 53, 0.12);
 }
 .search-input::placeholder { color: #a69480; }
-
 .filter-select {
   padding: 11px 16px;
   border: 2px solid #e6d5c2;
@@ -110,7 +109,6 @@ body {
   cursor: pointer;
 }
 .filter-select:focus { outline: none; border-color: #c97e35; }
-
 .btn-pdf {
   padding: 11px 26px;
   background: linear-gradient(145deg, #c97e35, #b06a2a);
@@ -126,10 +124,10 @@ body {
 }
 .btn-pdf:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(180, 100, 30, 0.3); }
 
-/* STUDENT GRID */
+/* GRID */
 .student-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
   gap: 20px;
 }
 
@@ -147,25 +145,25 @@ body {
   box-shadow: 0 10px 32px rgba(140, 90, 40, 0.12);
 }
 
-/* CARD TOP BAR */
+/* CARD TOP */
 .card-top {
   background: linear-gradient(135deg, #f2e6d9, #e8d9c8);
-  padding: 14px 18px;
+  padding: 12px 18px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #e0cebb;
 }
 .card-top .reg-number {
-  font-size: 0.75rem;
-  color: #7a6856;
-  font-weight: 500;
   font-family: 'Courier New', monospace;
+  font-size: 0.72rem;
+  color: #7a6856;
+  font-weight: 600;
 }
 .result-tag {
   padding: 3px 14px;
   border-radius: 20px;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.4px;
@@ -183,47 +181,111 @@ body {
 
 /* CARD BODY */
 .card-body { padding: 16px 18px; }
-.card-body .student-name {
+.student-name {
   font-family: 'Merriweather', serif;
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   color: #2c1f14;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
-.card-body .student-group {
-  font-size: 0.76rem;
+.student-group {
+  font-size: 0.73rem;
   color: #8c7a68;
-  margin-bottom: 14px;
-  font-weight: 400;
+  margin-bottom: 10px;
 }
 
-/* SUBJECT ROWS */
-.subject-line {
+/* PERCENTAGE BAR */
+.percent-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 5px 0;
-  border-bottom: 1px solid #f0e6dc;
-  font-size: 0.8rem;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: #f8f0e8;
+  border-radius: 8px;
+  border: 1px solid #e6d5c2;
 }
-.subject-line:last-of-type { border-bottom: none; }
-.subject-line .subj-label { color: #5a4a38; font-weight: 500; }
-.subject-line .subj-score { color: #8c7a68; font-size: 0.72rem; }
-.subject-line .subj-grade {
+.percent-label {
+  font-size: 0.72rem;
+  color: #7a6856;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.percent-value {
+  font-size: 1.1rem;
   font-weight: 700;
-  font-size: 0.8rem;
-  min-width: 28px;
+  color: #9a5c24;
+  min-width: 48px;
+}
+.percent-bar-bg {
+  flex: 1;
+  height: 6px;
+  background: #e6d5c2;
+  border-radius: 3px;
+  overflow: hidden;
+  min-width: 60px;
+}
+.percent-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+.percent-bar-fill.high { background: linear-gradient(90deg, #2e7d32, #43a047); }
+.percent-bar-fill.medium { background: linear-gradient(90deg, #b8732e, #d4893a); }
+.percent-bar-fill.low { background: linear-gradient(90deg, #c62828, #e53935); }
+
+/* SUBJECT TABLE */
+.subj-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+.subj-table th {
+  text-align: left;
+  font-weight: 600;
+  color: #7a6856;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 5px 6px;
+  border-bottom: 1px solid #e6d5c2;
+}
+.subj-table th:last-child,
+.subj-table td:last-child {
   text-align: right;
 }
-
-/* HIGHLIGHT POLITICAL SCIENCE */
-.subject-line.highlight {
-  background: #fcf1e6;
-  margin: 0 -4px;
-  padding: 5px 4px;
-  border-radius: 6px;
-  border-bottom: 1px solid #f0e6dc;
+.subj-table th:nth-child(2),
+.subj-table th:nth-child(3),
+.subj-table th:nth-child(4),
+.subj-table td:nth-child(2),
+.subj-table td:nth-child(3),
+.subj-table td:nth-child(4) {
+  text-align: center;
 }
-.subject-line.highlight .subj-label { color: #9a5c24; font-weight: 600; }
+.subj-table td {
+  padding: 5px 6px;
+  border-bottom: 1px solid #f0e6dc;
+  vertical-align: middle;
+}
+.subj-table tr:last-child td {
+  border-bottom: none;
+}
+.subj-table .subj-name {
+  font-weight: 500;
+  color: #5a4a38;
+}
+.subj-table .highlight-row {
+  background: #fcf1e6;
+}
+.subj-table .highlight-row .subj-name {
+  color: #9a5c24;
+  font-weight: 600;
+}
+.subj-grades {
+  font-weight: 600;
+  font-size: 0.76rem;
+}
 
 /* GRADE COLORS */
 .grade-A-plus { color: #1b5e20; }
@@ -249,7 +311,7 @@ body {
   border: 1.5px solid #c97e35;
   border-radius: 8px;
   color: #9a5c24;
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -259,16 +321,17 @@ body {
   color: #fef7f0;
 }
 
-/* EMPTY STATE */
+/* EMPTY */
 .empty-state {
   text-align: center;
   padding: 60px 20px;
   color: #a69480;
   font-size: 0.95rem;
   display: none;
+  grid-column: 1 / -1;
 }
 
-/* TOAST NOTIFICATION */
+/* TOAST */
 .toast-msg {
   position: fixed;
   bottom: 28px;
@@ -297,7 +360,6 @@ body {
   .search-input { min-width: 100%; }
   .stat-box { min-width: 80px; padding: 10px 14px; }
 }
-
 @media print {
   body { background: #fff; padding: 0; }
   .toolbar, .card-footer, .btn-pdf, .btn-save-card { display: none !important; }
@@ -357,24 +419,76 @@ body {
 <div class="toast-msg" id="toast"></div>
 
 <script>
-// ========== LOAD DATA FROM data.json ==========
-let students = [];
+// ========== DATA ==========
+const RAW_DATA = {"s":"10030-GOVT HSS,VELLIYODE,KOZHIKKODE - KOZHIKKODE","y":"HSE Second Year March 2026","d":[
+{"r":25233678,"n":"ABHAY BABU","g":"COMMERCE","s":[["ENGLISH",37,27,64,"D"],["MALAYALAM",39,73,113,"C+"],["BSFM",39,46,87,"C"],["ACCA",33,32,100,"C+"],["ECONOMICS",38,41,86,"C"],["POLITICAL SCIENCE",36,67,103,"C+"]],"re":"NHS"},
+{"r":25233679,"n":"ABHIJITH MANOJ","g":"COMMERCE","s":[["ENGLISH",39,73,121,"B"],["MALAYALAM",40,112,152,"B+"],["BSFM",38,81,120,"B"],["ACCA",35,46,120,"B"],["ECONOMICS",38,83,140,"B+"],["POLITICAL SCIENCE",36,80,120,"B"]],"re":"EHS"},
+{"r":25233680,"n":"ALAN DEV","g":"COMMERCE","s":[["ENGLISH",37,45,82,"D"],["MALAYALAM",39,121,160,"A"],["BSFM",39,75,114,"C+"],["ACCA",34,35,99,"D"],["ECONOMICS",39,95,134,"B"],["POLITICAL SCIENCE",40,122,162,"A"]],"re":"NHS"},
+{"r":25233681,"n":"ANURAG K P","g":"COMMERCE","s":[["ENGLISH",38,31,86,"C"],["MALAYALAM",39,100,140,"B+"],["BSFM",39,59,100,"C+"],["ACCA",37,38,103,"C+"],["ECONOMICS",39,66,105,"C+"],["POLITICAL SCIENCE",35,61,96,"C"]],"re":"EHS"},
+{"r":25233682,"n":"ASHNIL T R","g":"COMMERCE","s":[["ENGLISH",36,12,48,"D"],["MALAYALAM",39,44,83,"D"],["BSFM",34,22,56,"D"],["ACCA",27,15,null,"Ab"],["ECONOMICS",35,25,60,"D"],["POLITICAL SCIENCE",32,20,52,"D"]],"re":"NHS"},
+{"r":25233683,"n":"ASWIN JAISON","g":"COMMERCE","s":[["ENGLISH",40,107,147,"B+"],["MALAYALAM",40,142,182,"A+"],["BSFM",40,83,123,"B"],["ACCA",39,42,106,"C+"],["ECONOMICS",39,71,110,"C+"],["POLITICAL SCIENCE",40,132,172,"A"]],"re":"EHS"},
+{"r":25233684,"n":"DILJITH","g":"COMMERCE","s":[["ENGLISH",35,21,56,"D"],["MALAYALAM",39,74,113,"C+"],["BSFM",34,22,56,"D"],["ACCA",27,14,66,"D"],["ECONOMICS",36,36,72,"D"],["POLITICAL SCIENCE",32,40,72,"D"]],"re":"NHS"},
+{"r":25233685,"n":"FEBIN JOSEPH","g":"COMMERCE","s":[["ENGLISH",39,66,107,"C+"],["MALAYALAM",40,106,148,"B+"],["BSFM",37,52,102,"C+"],["ACCA",34,36,102,"C+"],["ECONOMICS",37,45,102,"C+"],["POLITICAL SCIENCE",37,65,103,"C+"]],"re":"EHS"},
+{"r":25233686,"n":"HARINANDH K S","g":"COMMERCE","s":[["ENGLISH",36,70,106,"C+"],["MALAYALAM",39,93,132,"B"],["BSFM",37,44,81,"D"],["ACCA",28,32,85,"D"],["ECONOMICS",35,46,81,"D"],["POLITICAL SCIENCE",37,44,81,"D"]],"re":"NHS"},
+{"r":25233687,"n":"MUHAMMAD NAHYAN","g":"COMMERCE","s":[["ENGLISH",39,105,144,"B+"],["MALAYALAM",39,80,119,"C+"],["BSFM",38,58,96,"C"],["ACCA",37,51,118,"C+"],["ECONOMICS",38,64,102,"C+"],["POLITICAL SCIENCE",35,61,96,"C"]],"re":"EHS"},
+{"r":25233688,"n":"MUHAMMAD SAFWAN","g":"COMMERCE","s":[["ENGLISH",38,71,109,"C+"],["MALAYALAM",39,93,132,"B"],["BSFM",34,75,109,"C+"],["ACCA",28,44,100,"C+"],["ECONOMICS",34,62,96,"C"],["POLITICAL SCIENCE",33,100,133,"B"]],"re":"EHS"},
+{"r":25233689,"n":"ROSHITH K P","g":"COMMERCE","s":[["ENGLISH",38,54,101,"C+"],["MALAYALAM",40,118,160,"A"],["BSFM",39,70,109,"C+"],["ACCA",37,49,120,"B"],["ECONOMICS",37,67,104,"C+"],["POLITICAL SCIENCE",36,90,126,"B"]],"re":"EHS"},
+{"r":25233690,"n":"SAYOOJ K P","g":"COMMERCE","s":[["ENGLISH",36,15,51,"D"],["MALAYALAM",39,50,90,"C"],["BSFM",37,41,85,"C"],["ACCA",28,30,89,"C"],["ECONOMICS",36,42,84,"C"],["POLITICAL SCIENCE",34,48,82,"C"]],"re":"NHS"},
+{"r":25233691,"n":"SREE NAND K","g":"COMMERCE","s":[["ENGLISH",38,31,69,"D"],["MALAYALAM",39,117,156,"B+"],["BSFM",39,72,111,"C+"],["ACCA",34,42,104,"C+"],["ECONOMICS",39,52,91,"C"],["POLITICAL SCIENCE",37,76,113,"C+"]],"re":"NHS"},
+{"r":25233692,"n":"AAVANI HARISH M","g":"COMMERCE","s":[["ENGLISH",40,139,179,"A"],["MALAYALAM",40,119,159,"B+"],["BSFM",39,104,143,"B+"],["ACCA",40,73,148,"B+"],["ECONOMICS",40,108,148,"B+"],["POLITICAL SCIENCE",40,116,156,"B+"]],"re":"EHS"},
+{"r":25233693,"n":"AHANNA LAL","g":"COMMERCE","s":[["ENGLISH",38,48,86,"C"],["MALAYALAM",40,109,149,"B+"],["BSFM",39,57,96,"C"],["ACCA",36,39,103,"C+"],["ECONOMICS",40,60,100,"C+"],["POLITICAL SCIENCE",39,84,123,"B"]],"re":"EHS"},
+{"r":25233694,"n":"ANUVARNA K P","g":"COMMERCE","s":[["ENGLISH",40,92,132,"B"],["MALAYALAM",40,153,193,"A+"],["BSFM",39,102,141,"B+"],["ACCA",40,79,154,"B+"],["ECONOMICS",40,122,162,"A"],["POLITICAL SCIENCE",40,135,175,"A"]],"re":"EHS"},
+{"r":25233695,"n":"AVANDHIKA .N P","g":"COMMERCE","s":[["ENGLISH",40,95,135,"B"],["MALAYALAM",40,148,188,"A+"],["BSFM",40,108,148,"B+"],["ACCA",40,75,150,"B+"],["ECONOMICS",40,120,160,"A"],["POLITICAL SCIENCE",40,146,186,"A+"]],"re":"EHS"},
+{"r":25233696,"n":"NAIGA P P","g":"COMMERCE","s":[["ENGLISH",40,115,155,"B+"],["MALAYALAM",40,156,196,"A+"],["BSFM",40,124,164,"A"],["ACCA",40,97,172,"A"],["ECONOMICS",40,119,159,"B+"],["POLITICAL SCIENCE",40,145,185,"A+"]],"re":"EHS"},
+{"r":25233697,"n":"SREYON P V","g":"COMMERCE","s":[["ENGLISH",39,59,102,"C+"],["HINDI",40,144,184,"A+"],["BSFM",38,60,102,"C+"],["ACCA",32,45,109,"C+"],["ECONOMICS",38,37,102,"C+"],["POLITICAL SCIENCE",38,61,102,"C+"]],"re":"EHS"},
+{"r":25233698,"n":"ANUNANDA N A","g":"COMMERCE","s":[["ENGLISH",40,134,174,"A"],["HINDI",40,145,185,"A+"],["BSFM",39,82,121,"B"],["ACCA",40,51,127,"B"],["ECONOMICS",39,82,121,"B"],["POLITICAL SCIENCE",40,109,149,"B+"]],"re":"EHS"},
+{"r":25233699,"n":"IRSHANA NOORA","g":"COMMERCE","s":[["ENGLISH",39,85,124,"B"],["HINDI",40,148,188,"A+"],["BSFM",40,104,144,"B+"],["ACCA",37,56,123,"B"],["ECONOMICS",38,94,132,"B"],["POLITICAL SCIENCE",39,119,158,"B+"]],"re":"EHS"},
+{"r":25233700,"n":"SHALU KRISHNA M","g":"COMMERCE","s":[["ENGLISH",40,138,180,"A+"],["HINDI",40,156,196,"A+"],["BSFM",40,132,174,"A"],["ACCA",40,74,162,"A"],["ECONOMICS",40,125,167,"A"],["POLITICAL SCIENCE",40,127,168,"A"]],"re":"EHS"},
+{"r":25233701,"n":"VYGHA LAKSHMI P S","g":"COMMERCE","s":[["ENGLISH",39,88,127,"B"],["HINDI",40,152,192,"A+"],["BSFM",37,53,90,"C"],["ACCA",38,39,105,"C+"],["ECONOMICS",40,76,116,"C+"],["POLITICAL SCIENCE",38,80,118,"C+"]],"re":"EHS"},
+{"r":25233702,"n":"MUHAMMAD ADIL","g":"COMMERCE","s":[["ENGLISH",38,56,94,"C"],["ARABIC",39,81,120,"B"],["BSFM",37,52,89,"C"],["ACCA",34,53,125,"B"],["ECONOMICS",37,54,91,"C"],["POLITICAL SCIENCE",36,63,99,"C"]],"re":"EHS"},
+{"r":25233703,"n":"MUHAMMAD DHANIYAL","g":"COMMERCE","s":[["ENGLISH",40,108,148,"B+"],["ARABIC",39,92,131,"B"],["BSFM",39,63,102,"C+"],["ACCA",37,50,125,"B"],["ECONOMICS",38,72,110,"C+"],["POLITICAL SCIENCE",37,76,113,"C+"]],"re":"EHS"},
+{"r":25233704,"n":"MUHAMMAD NIHAL","g":"COMMERCE","s":[["ENGLISH",38,72,121,"B"],["ARABIC",39,145,184,"A+"],["BSFM",40,125,166,"A"],["ACCA",37,70,146,"B+"],["ECONOMICS",39,114,160,"A"],["POLITICAL SCIENCE",40,145,185,"A+"]],"re":"EHS"},
+{"r":25233705,"n":"MUHAMMAD RISHAL","g":"COMMERCE","s":[["ENGLISH",39,110,149,"B+"],["ARABIC",39,134,173,"A"],["BSFM",37,95,132,"B"],["ACCA",28,66,134,"B"],["ECONOMICS",36,88,124,"B"],["POLITICAL SCIENCE",38,121,159,"B+"]],"re":"EHS"},
+{"r":25233706,"n":"MUHAMMAD SAJAL","g":"COMMERCE","s":[["ENGLISH",37,41,78,"D"],["ARABIC",38,88,126,"B"],["BSFM",35,38,73,"D"],["ACCA",34,53,122,"B"],["ECONOMICS",35,67,102,"C+"],["POLITICAL SCIENCE",36,54,90,"C"]],"re":"NHS"},
+{"r":25233707,"n":"MUHAMMED C P","g":"COMMERCE","s":[["ENGLISH",37,86,123,"B"],["ARABIC",38,124,162,"A"],["BSFM",36,66,102,"C+"],["ACCA",29,59,126,"B"],["ECONOMICS",36,77,113,"C+"],["POLITICAL SCIENCE",35,78,113,"C+"]],"re":"EHS"},
+{"r":25233708,"n":"MUHAMMED FEBIN P P","g":"COMMERCE","s":[["ENGLISH",35,48,83,"C"],["ARABIC",38,82,120,"B"],["BSFM",33,40,73,"D"],["ACCA",28,46,104,"C+"],["ECONOMICS",34,51,85,"C"],["POLITICAL SCIENCE",32,70,102,"C+"]],"re":"NHS"},
+{"r":25233710,"n":"MUHAMMED IJAS V","g":"COMMERCE","s":[["ENGLISH",36,25,61,"D"],["ARABIC",38,77,115,"C+"],["BSFM",37,32,69,"D"],["ACCA",28,37,90,"C"],["ECONOMICS",35,31,66,"D"],["POLITICAL SCIENCE",35,61,96,"C"]],"re":"NHS"},
+{"r":25233711,"n":"MUHAMMED IMBRAN K K","g":"COMMERCE","s":[["ENGLISH",35,26,61,"D"],["ARABIC",37,77,114,"C+"],["BSFM",34,36,70,"D"],["ACCA",28,55,108,"C+"],["ECONOMICS",35,43,78,"D"],["POLITICAL SCIENCE",35,64,99,"C"]],"re":"NHS"},
+{"r":25233712,"n":"MUHAMMED MIDLAJ P","g":"COMMERCE","s":[["ENGLISH",37,32,69,"D"],["ARABIC",38,83,121,"B"],["BSFM",35,33,68,"D"],["ACCA",27,40,95,"C"],["ECONOMICS",35,32,67,"D"],["POLITICAL SCIENCE",36,41,77,"D"]],"re":"NHS"},
+{"r":25233713,"n":"MUHAMMED MINHAL V","g":"COMMERCE","s":[["ENGLISH",37,48,85,"C"],["ARABIC",40,108,148,"B+"],["BSFM",36,58,94,"C"],["ACCA",35,48,113,"C+"],["ECONOMICS",37,62,99,"C"],["POLITICAL SCIENCE",37,96,133,"B"]],"re":"EHS"},
+{"r":25233714,"n":"MUHAMMED MISNAD","g":"COMMERCE","s":[["ENGLISH",40,89,129,"B"],["ARABIC",40,142,182,"A+"],["BSFM",38,83,121,"B"],["ACCA",33,74,143,"B+"],["ECONOMICS",39,78,117,"C+"],["POLITICAL SCIENCE",37,120,157,"B+"]],"re":"EHS"},
+{"r":25233715,"n":"MUHAMMED NABEEL","g":"COMMERCE","s":[["ENGLISH",37,51,88,"C"],["ARABIC",39,105,144,"B+"],["BSFM",35,49,84,"C"],["ACCA",33,38,99,"C"],["ECONOMICS",39,51,90,"C"],["POLITICAL SCIENCE",35,53,88,"C"]],"re":"EHS"},
+{"r":25233716,"n":"MUHAMMED NASL","g":"COMMERCE","s":[["ENGLISH",35,31,66,"D"],["ARABIC",38,92,130,"B"],["BSFM",35,32,67,"D"],["ACCA",27,38,90,"C"],["ECONOMICS",35,26,61,"D"],["POLITICAL SCIENCE",36,58,94,"C"]],"re":"NHS"},
+{"r":25233717,"n":"MUHAMMED RABEEU K","g":"COMMERCE","s":[["ENGLISH",35,43,78,"D"],["ARABIC",39,127,166,"A"],["BSFM",39,54,93,"C"],["ACCA",28,42,100,"C+"],["ECONOMICS",37,55,92,"C"],["POLITICAL SCIENCE",36,92,128,"B"]],"re":"NHS"},
+{"r":25233718,"n":"MUHAMMED SHABIN","g":"COMMERCE","s":[["ENGLISH",37,52,89,"C"],["ARABIC",39,69,108,"C+"],["BSFM",39,39,78,"D"],["ACCA",37,40,115,"C+"],["ECONOMICS",37,45,82,"D"],["POLITICAL SCIENCE",37,56,93,"C"]],"re":"NHS"},
+{"r":25233719,"n":"MUHAMMED SHAMIL","g":"COMMERCE","s":[["ENGLISH",36,42,78,"D"],["ARABIC",38,102,140,"B+"],["BSFM",34,44,78,"D"],["ACCA",34,38,102,"C+"],["ECONOMICS",36,40,76,"D"],["POLITICAL SCIENCE",34,59,93,"C"]],"re":"NHS"},
+{"r":25233720,"n":"MUHAMMED SINAN P","g":"COMMERCE","s":[["ENGLISH",39,59,98,"C"],["ARABIC",38,92,130,"B"],["BSFM",37,38,75,"D"],["ACCA",35,50,115,"C+"],["ECONOMICS",36,48,84,"C"],["POLITICAL SCIENCE",36,59,95,"C"]],"re":"NHS"},
+{"r":25233721,"n":"MUHAMMED SINAN V P","g":"COMMERCE","s":[["ENGLISH",38,59,97,"C"],["ARABIC",39,99,138,"B"],["BSFM",37,52,89,"C"],["ACCA",28,29,87,"D"],["ECONOMICS",36,52,88,"C"],["POLITICAL SCIENCE",37,80,117,"C+"]],"re":"NHS"},
+{"r":25233722,"n":"MUHAMMED UNAIS P T K","g":"COMMERCE","s":[["ENGLISH",39,77,116,"C+"],["ARABIC",39,134,173,"A"],["BSFM",39,44,83,"D"],["ACCA",38,61,137,"B"],["ECONOMICS",40,51,91,"C"],["POLITICAL SCIENCE",38,62,100,"C+"]],"re":"NHS"},
+{"r":25233723,"n":"MUNAVVIR K","g":"COMMERCE","s":[["ENGLISH",37,34,71,"D"],["ARABIC",38,105,143,"B+"],["BSFM",34,36,70,"D"],["ACCA",32,47,109,"C+"],["ECONOMICS",35,40,75,"D"],["POLITICAL SCIENCE",33,55,88,"C"]],"re":"NHS"},
+{"r":25233724,"n":"RASAL MUHAMMED HARIS","g":"COMMERCE","s":[["ENGLISH",36,null,null,"Ab"],["ARABIC",38,78,116,"C+"],["BSFM",34,13,47,"D"],["ACCA",28,null,null,"Ab"],["ECONOMICS",34,null,null,"Ab"],["POLITICAL SCIENCE",32,null,null,"Ab"]],"re":"NHS"},
+{"r":25233725,"n":"FAHEEMA C P","g":"COMMERCE","s":[["ENGLISH",38,56,94,"C"],["ARABIC",38,146,184,"A+"],["BSFM",36,63,99,"C"],["ACCA",38,60,136,"B"],["ECONOMICS",39,66,105,"C+"],["POLITICAL SCIENCE",38,66,104,"C+"]],"re":"EHS"},
+{"r":25233726,"n":"FATHIMA SANHA","g":"COMMERCE","s":[["ENGLISH",39,63,102,"C+"],["ARABIC",40,151,191,"A+"],["BSFM",39,50,89,"C"],["ACCA",38,61,137,"B"],["ECONOMICS",40,72,112,"C+"],["POLITICAL SCIENCE",39,82,121,"B"]],"re":"EHS"},
+{"r":25233727,"n":"FATHIMATHU NAJAH P","g":"COMMERCE","s":[["ENGLISH",39,77,116,"C+"],["ARABIC",40,155,195,"A+"],["BSFM",34,55,89,"C"],["ACCA",39,81,155,"B+"],["ECONOMICS",40,80,120,"B"],["POLITICAL SCIENCE",34,89,123,"B"]],"re":"EHS"},
+{"r":25233728,"n":"MISNA T P","g":"COMMERCE","s":[["ENGLISH",40,78,118,"C+"],["ARABIC",40,156,196,"A+"],["BSFM",34,75,109,"C+"],["ACCA",38,75,151,"B+"],["ECONOMICS",40,90,130,"B"],["POLITICAL SCIENCE",34,110,144,"B+"]],"re":"EHS"},
+{"r":25233729,"n":"NAJA FATHIMA A P","g":"COMMERCE","s":[["ENGLISH",40,100,140,"B+"],["ARABIC",40,160,200,"A+"],["BSFM",40,133,173,"A"],["ACCA",39,106,185,"A+"],["ECONOMICS",40,154,194,"A+"],["POLITICAL SCIENCE",39,142,181,"A+"]],"re":"EHS"},
+{"r":25233730,"n":"NAJIYA.T.K","g":"COMMERCE","s":[["ENGLISH",40,113,153,"B+"],["ARABIC",39,146,185,"A+"],["BSFM",34,103,137,"B"],["ACCA",38,95,168,"A"],["ECONOMICS",40,122,162,"A"],["POLITICAL SCIENCE",35,107,142,"B+"]],"re":"EHS"},
+{"r":25233731,"n":"RANA FATHIMA N K","g":"COMMERCE","s":[["ENGLISH",40,87,127,"B"],["ARABIC",40,158,198,"A+"],["BSFM",39,97,136,"B"],["ACCA",39,79,156,"B+"],["ECONOMICS",39,109,148,"B+"],["POLITICAL SCIENCE",40,144,184,"A+"]],"re":"EHS"},
+{"r":25233732,"n":"RESHEENA THASNI","g":"COMMERCE","s":[["ENGLISH",39,50,89,"C"],["ARABIC",38,121,159,"B+"],["BSFM",34,59,93,"C"],["ACCA",36,45,116,"C+"],["ECONOMICS",39,59,98,"C"],["POLITICAL SCIENCE",34,84,118,"C+"]],"re":"EHS"},
+{"r":25233733,"n":"RIFA FATHIMA","g":"COMMERCE","s":[["ENGLISH",40,91,131,"B"],["ARABIC",40,160,200,"A+"],["BSFM",40,96,136,"B"],["ACCA",39,76,155,"B+"],["ECONOMICS",40,101,141,"B+"],["POLITICAL SCIENCE",40,83,123,"B"]],"re":"EHS"},
+{"r":25233734,"n":"RIFA FATHIMA T K P","g":"COMMERCE","s":[["ENGLISH",40,79,119,"C+"],["ARABIC",40,160,200,"A+"],["BSFM",39,89,128,"B"],["ACCA",40,76,154,"B+"],["ECONOMICS",40,111,151,"B+"],["POLITICAL SCIENCE",39,105,144,"B+"]],"re":"EHS"},
+{"r":25233735,"n":"RISHA FATHIMA K P","g":"COMMERCE","s":[["ENGLISH",39,78,117,"C+"],["ARABIC",38,124,162,"A"],["BSFM",34,76,110,"C+"],["ACCA",33,67,138,"B"],["ECONOMICS",40,99,139,"B"],["POLITICAL SCIENCE",34,67,101,"C+"]],"re":"EHS"},
+{"r":25233736,"n":"SAJA FATHIMA T K","g":"COMMERCE","s":[["ENGLISH",38,47,88,"C"],["ARABIC",38,144,182,"A+"],["BSFM",35,58,101,"C+"],["ACCA",39,59,134,"B"],["ECONOMICS",39,87,127,"B"],["POLITICAL SCIENCE",34,60,101,"C+"]],"re":"EHS"},
+{"r":25233737,"n":"SAJA P K","g":"COMMERCE","s":[["ENGLISH",38,43,81,"D"],["ARABIC",38,152,190,"A+"],["BSFM",36,55,91,"C"],["ACCA",34,55,117,"C+"],["ECONOMICS",40,74,114,"C+"],["POLITICAL SCIENCE",36,62,98,"C"]],"re":"NHS"},
+{"r":25233738,"n":"SANA FATHIMA","g":"COMMERCE","s":[["ENGLISH",37,38,75,"D"],["ARABIC",39,116,155,"B+"],["BSFM",36,40,76,"D"],["ACCA",37,30,92,"D"],["ECONOMICS",38,41,79,"D"],["POLITICAL SCIENCE",36,61,97,"C"]],"re":"NHS"},
+{"r":25233739,"n":"SANA FATHIMA P","g":"COMMERCE","s":[["ENGLISH",39,82,121,"B"],["ARABIC",39,150,189,"A+"],["BSFM",40,106,146,"B+"],["ACCA",40,98,178,"A"],["ECONOMICS",40,133,173,"A"],["POLITICAL SCIENCE",40,105,145,"B+"]],"re":"EHS"},
+{"r":25233740,"n":"SHAHANA SHERIN T V","g":"COMMERCE","s":[["ENGLISH",38,64,102,"C+"],["ARABIC",39,116,155,"B+"],["BSFM",37,53,90,"C"],["ACCA",38,27,95,"D"],["ECONOMICS",39,48,87,"C"],["POLITICAL SCIENCE",36,49,85,"C"]],"re":"NHS"},
+{"r":25233741,"n":"ZANHA SHERIN V P","g":"COMMERCE","s":[["ENGLISH",39,73,114,"C+"],["ARABIC",40,122,163,"A"],["BSFM",39,66,106,"C+"],["ACCA",37,41,109,"C+"],["ECONOMICS",39,55,101,"C+"],["POLITICAL SCIENCE",38,75,121,"B"]],"re":"EHS"}
+]};
 
-function loadData() {
-  fetch('data.json')
-    .then(res => {
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      return res.json();
-    })
-    .then(json => {
-      students = json.d || [];
-      renderCards();
-    })
-    .catch(err => {
-      document.getElementById('cardGrid').innerHTML =
-        '<div style="text-align:center;padding:60px 20px;color:#c62828;font-size:0.95rem;grid-column:1/-1;">Failed to load data.json: ' + err.message + '</div>';
-    });
-}
+// ========== STATE ==========
+const MAX_TOTAL = 1200;
+let students = RAW_DATA.d;
 
 // ========== UTILITY ==========
 function gradeClass(g) {
@@ -390,27 +504,18 @@ function gradeClass(g) {
   return '';
 }
 
-function getSubj(student, name) {
-  const fullNames = {
-    'BSFM': 'BUSINESS STUDIES WITH FUNCTIONAL MANAGEMENT',
-    'ACCA': 'ACCOUNTANCY WITH COMPUTER ACCOUNTING',
-    'POLITICAL SCIENCE': 'POLITICAL SCIENCE'
-  };
-  const target = fullNames[name] || name;
-  for (const s of student.s) {
-    if (s[0] === target) return s;
+function calcPercentage(st) {
+  let total = 0;
+  let hasAllAbsent = true;
+  for (const s of st.s) {
+    const t = s[3];
+    if (t !== null && t !== undefined && t !== 'Ab' && t !== '-') {
+      total += Number(t);
+      hasAllAbsent = false;
+    }
   }
-  return null;
-}
-
-function shortName(full) {
-  const map = {
-    'BUSINESS STUDIES WITH FUNCTIONAL MANAGEMENT': 'BSFM',
-    'ACCOUNTANCY WITH COMPUTER ACCOUNTING': 'ACCA',
-    'ACCOUNTANCY WITH AFS': 'ACCA(AFS)',
-    'POLITICAL SCIENCE': 'Pol Science'
-  };
-  return map[full] || full;
+  if (hasAllAbsent) return { total: 0, pct: 0, valid: false };
+  return { total, pct: (total / MAX_TOTAL) * 100, valid: true };
 }
 
 function showToast(msg) {
@@ -428,23 +533,19 @@ function renderCards() {
 
   const filtered = students.filter(st => {
     if (resultFilter !== 'all' && st.re !== resultFilter) return false;
-
-    const ps = getSubj(st, 'POLITICAL SCIENCE');
+    const ps = st.s.find(s => s[0] === 'POLITICAL SCIENCE');
     if (gradeFilter !== 'all') {
       if (!ps || ps[4] !== gradeFilter) return false;
     }
-
     if (query) {
       const nameMatch = st.n.toLowerCase().includes(query);
       const regMatch = String(st.r).includes(query);
       const subjMatch = st.s.some(s => s[0].toLowerCase().includes(query));
       if (!nameMatch && !regMatch && !subjMatch) return false;
     }
-
     return true;
   });
 
-  // Stats
   document.getElementById('statTotal').textContent = students.length;
   document.getElementById('statEHS').textContent = students.filter(s => s.re === 'EHS').length;
   document.getElementById('statNHS').textContent = students.filter(s => s.re === 'NHS').length;
@@ -461,18 +562,27 @@ function renderCards() {
 
   let html = '';
   for (const st of filtered) {
-    const ps = getSubj(st, 'POLITICAL SCIENCE');
-    const psGrade = ps ? ps[4] : '';
-    const psScore = ps ? (ps[3] !== null && ps[3] !== undefined ? ps[3] : 'Ab') : '';
+    const { total, pct, valid } = calcPercentage(st);
+    const pctFormatted = valid ? pct.toFixed(1) : '--';
+    const barClass = !valid ? '' : pct >= 60 ? 'high' : pct >= 35 ? 'medium' : 'low';
+    const barWidth = valid ? Math.min(pct, 100) : 0;
 
-    const eng = getSubj(st, 'ENGLISH');
-    const lang2 = st.s.filter(s => s[0] !== 'ENGLISH' && s[0] !== 'POLITICAL SCIENCE' && s[0] !== 'BSFM' && s[0] !== 'ACCA' && s[0] !== 'ECONOMICS' && s[0] !== 'ACCOUNTANCY WITH COMPUTER ACCOUNTING' && s[0] !== 'BUSINESS STUDIES WITH FUNCTIONAL MANAGEMENT' && s[0] !== 'ACCOUNTANCY WITH AFS')[0];
-    const lang2Name = lang2 ? shortName(lang2[0]) : '';
-    const lang2Grade = lang2 ? lang2[4] : '';
-
-    const bsfm = getSubj(st, 'BSFM');
-    const acca = getSubj(st, 'ACCA');
-    const eco = getSubj(st, 'ECONOMICS');
+    let rows = '';
+    for (const subj of st.s) {
+      const isPS = subj[0] === 'POLITICAL SCIENCE';
+      const ce = subj[1] !== null && subj[1] !== undefined ? subj[1] : '-';
+      const te = subj[2] !== null && subj[2] !== undefined ? subj[2] : '-';
+      const t = subj[3] !== null && subj[3] !== undefined ? subj[3] : '-';
+      const grade = subj[4];
+      const highlight = isPS ? 'highlight-row' : '';
+      rows += `<tr class="${highlight}">
+        <td class="subj-name">${subj[0]}</td>
+        <td>${ce}</td>
+        <td>${te}</td>
+        <td>${t}</td>
+        <td class="subj-grades ${gradeClass(grade)}">${grade}</td>
+      </tr>`;
+    }
 
     html += `
 <div class="student-card">
@@ -483,47 +593,26 @@ function renderCards() {
   <div class="card-body">
     <div class="student-name">${st.n}</div>
     <div class="student-group">${st.g}</div>
-
-    <div class="subject-line">
-      <span class="subj-label">English</span>
-      <span class="subj-score">CE ${eng ? eng[1] : '-'} · TE ${eng ? eng[2] : '-'}</span>
-      <span class="subj-grade ${gradeClass(eng ? eng[4] : '')}">${eng ? eng[4] : '-'}</span>
+    <div class="percent-row">
+      <span class="percent-label">Total</span>
+      <span class="percent-value">${valid ? total : '--'}/1200</span>
+      <span class="percent-label">${pctFormatted}%</span>
+      <div class="percent-bar-bg">
+        <div class="percent-bar-fill ${barClass}" style="width:${barWidth}%"></div>
+      </div>
     </div>
-
-    ${lang2 ? `
-    <div class="subject-line">
-      <span class="subj-label">${lang2Name}</span>
-      <span class="subj-score">CE ${lang2[1]} · TE ${lang2[2]}</span>
-      <span class="subj-grade ${gradeClass(lang2[4])}">${lang2[4]}</span>
-    </div>` : ''}
-
-    ${bsfm ? `
-    <div class="subject-line">
-      <span class="subj-label">BSFM</span>
-      <span class="subj-score">CE ${bsfm[1]} · TE ${bsfm[2]}</span>
-      <span class="subj-grade ${gradeClass(bsfm[4])}">${bsfm[4]}</span>
-    </div>` : ''}
-
-    ${acca ? `
-    <div class="subject-line">
-      <span class="subj-label">ACCA</span>
-      <span class="subj-score">CE ${acca[1]} · TE ${acca[2]}</span>
-      <span class="subj-grade ${gradeClass(acca[4])}">${acca[4]}</span>
-    </div>` : ''}
-
-    ${eco ? `
-    <div class="subject-line">
-      <span class="subj-label">Economics</span>
-      <span class="subj-score">CE ${eco[1]} · TE ${eco[2]}</span>
-      <span class="subj-grade ${gradeClass(eco[4])}">${eco[4]}</span>
-    </div>` : ''}
-
-    ${ps ? `
-    <div class="subject-line highlight">
-      <span class="subj-label">Political Science</span>
-      <span class="subj-score">CE ${ps[1]} · TE ${ps[2]} · Total ${ps[3] !== null && ps[3] !== undefined ? ps[3] : '-'}</span>
-      <span class="subj-grade ${gradeClass(ps[4])}">${ps[4]}</span>
-    </div>` : ''}
+    <table class="subj-table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>CE</th>
+          <th>TE</th>
+          <th>Total</th>
+          <th>Grade</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
   </div>
   <div class="card-footer">
     <button class="btn-save-card" onclick="saveCardAsImage(this, '${st.r}')">Save as Image</button>
@@ -534,7 +623,7 @@ function renderCards() {
   grid.innerHTML = html;
 }
 
-// ========== SAVE SINGLE CARD AS IMAGE ==========
+// ========== SAVE CARD AS IMAGE ==========
 function saveCardAsImage(btn, regNo) {
   const card = btn.closest('.student-card');
   html2canvas(card, {
@@ -556,28 +645,22 @@ function saveCardAsImage(btn, regNo) {
 // ========== DOWNLOAD ALL AS PDF ==========
 function downloadAllPDF() {
   const cards = document.querySelectorAll('.student-card');
-  if (cards.length === 0) {
-    showToast('No cards to download');
-    return;
-  }
+  if (cards.length === 0) { showToast('No cards to download'); return; }
 
   showToast('Generating PDF...');
-
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF('p', 'mm', 'a4');
   const pageW = 210;
   const pageH = 297;
   let yPos = 10;
-  let first = true;
 
-  // Title page
-  pdf.setFontSize(14);
+  pdf.setFontSize(13);
   pdf.setTextColor(154, 92, 36);
-  pdf.text('Commerce - Political Science Students', 105, 20, { align: 'center' });
-  pdf.setFontSize(10);
+  pdf.text('Commerce - Political Science Students', 105, 18, { align: 'center' });
+  pdf.setFontSize(9);
   pdf.setTextColor(100, 80, 60);
-  pdf.text('10030-GOVT HSS, VELLIYODE, KOZHIKKODE  |  HSE Second Year March 2026', 105, 28, { align: 'center' });
-  yPos = 36;
+  pdf.text('10030-GOVT HSS, VELLIYODE, KOZHIKKODE  |  HSE Second Year March 2026', 105, 25, { align: 'center' });
+  yPos = 32;
 
   const renderPromises = [];
   cards.forEach(card => {
@@ -592,18 +675,18 @@ function downloadAllPDF() {
   });
 
   Promise.all(renderPromises).then(canvases => {
-    canvases.forEach((canvas, idx) => {
+    canvases.forEach((canvas) => {
       const imgData = canvas.toDataURL('image/png');
-      const imgW = pageW - 20;
+      const imgW = pageW - 18;
       const imgH = (canvas.height / canvas.width) * imgW;
 
-      if (yPos + imgH > pageH - 15) {
+      if (yPos + imgH > pageH - 12) {
         pdf.addPage();
         yPos = 10;
       }
 
-      pdf.addImage(imgData, 'PNG', 10, yPos, imgW, imgH);
-      yPos += imgH + 8;
+      pdf.addImage(imgData, 'PNG', 9, yPos, imgW, imgH);
+      yPos += imgH + 6;
     });
 
     pdf.save('commerce_political_science_students.pdf');
@@ -614,7 +697,7 @@ function downloadAllPDF() {
 }
 
 // ========== INIT ==========
-document.addEventListener('DOMContentLoaded', loadData);
+document.addEventListener('DOMContentLoaded', renderCards);
 </script>
 </body>
-  </html>
+        </html>
